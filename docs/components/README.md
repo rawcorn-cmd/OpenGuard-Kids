@@ -1,0 +1,27 @@
+# BỘ TÀI LIỆU KỸ THUẬT CHUYÊN SÂU 16 THÀNH PHẦN OPENGUARD KIDS
+
+> Thư mục này chứa **16 tài liệu kỹ thuật chi tiết**, phân tích toàn diện từng thành phần, framework nền tảng và kịch bản vận hành tổng quát của hệ thống OpenGuard Kids.
+
+---
+
+## DANH MỤC 16 TÀI LIỆU KỸ THUẬT
+
+| STT | Tài Liệu Thành Phần | Trọng Tâm Công Nghệ & Framework Nền Tảng | Liên Kết Chi Tiết |
+| :---: | :--- | :--- | :---: |
+| **01** | **Dịch Vụ Nền Windows Service** | `pywin32` (`win32serviceutil`), Windows SCM, Session 0 Isolation, Anti-Kill via DACL & `LocalSystem`. | [01_windows_service_session0.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/01_windows_service_session0.md) |
+| **02** | **Kênh Truyền Nội Bộ Loopback IPC** | Giao thức HTTP REST trên `127.0.0.1:8765`, NTFS File ACL, Mã bí mật `X-Agent-Token` 64-hex, Báo động đỏ mất service > 15s. | [02_loopback_ipc_channel.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/02_loopback_ipc_channel.md) |
+| **03** | **Bộ Đếm Giờ Screen-Time Tracker** | Win32 API `user32.GetLastInputInfo`, FSM 10 trạng thái, Bẫy lùi đồng hồ `time.monotonic()` vs `time.time()`, Sai số $\le \pm 30$s/h. | [03_screen_time_tracker.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/03_screen_time_tracker.md) |
+| **04** | **Giám Sát Tiến Trình & Băm SHA-256** | Thư viện `psutil`, Win32 Toolhelp32, Mã băm SHA-256 nhị phân chống đổi tên file, Bộ đệm RAM $O(1)$, Đóng an toàn 2 pha (SIGTERM/SIGKILL). | [04_process_monitor_sha256.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/04_process_monitor_sha256.md) |
+| **05** | **Máy Chủ Phân Giải DNS Proxy UDP 53** | Thư viện `dnslib`, `asyncio` UDP Sockets, Bẻ hướng CNAME SafeSearch (Google/YouTube/Bing), 3 lớp khắc chế DoH Canary, Whitelist 111. | [05_dns_proxy_safesearch_doh.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/05_dns_proxy_safesearch_doh.md) |
+| **06** | **Máy Chủ Trang Chặn Giáo Dục Blockpage** | Micro HTTP Server `127.0.0.1:8080`, Giao diện HTML5 thân thiện, Nút bấm "Báo chặn nhầm", Tích hợp Tổng đài Trẻ em Quốc gia 111. | [06_polite_blockpage_server.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/06_polite_blockpage_server.md) |
+| **07** | **Bộ Đệm Ngoại Tuyến SQLite WAL** | SQLite 3 chế độ WAL (Write-Ahead Logging), Khóa UUIDv4 `Idempotency-Key` loại bỏ trùng lặp, Thuật toán Exponential Backoff kèm Jitter. | [07_offline_buffer_sqlite_wal.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/07_offline_buffer_sqlite_wal.md) |
+| **08** | **Ứng Dụng Khay Hệ Thống Minh Bạch Tray UI** | Win32 Shell NotifyIcon, `pystray`, Windows Toast Notifications, Hộp thoại ân hạn 60s không dập máy đột ngột, Màn hình đối chiếu 1:1. | [08_system_tray_ui_transparency.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/08_system_tray_ui_transparency.md) |
+| **09** | **Máy Chủ Quản Trị Trung Tâm FastAPI** | FastAPI, Uvicorn ASGI, Băm mật khẩu Argon2id (RFC 9106), Session Cookie HttpOnly/SameSite, Ràng buộc ORM phòng chống lỗ hổng IDOR. | [09_fastapi_server_auth_security.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/09_fastapi_server_auth_security.md) |
+| **10** | **Quy Trình Ghép Đôi Thiết Bị PIN 8 Ký Tự** | Mô-đun mật mã học `secrets`, Mã PIN 8 ký tự an toàn với TTL 10 phút, Cấp phát Device ID/Token lưu trữ bảo mật, Tuân thủ NĐ 13/2023. | [10_device_pairing_pin_protocol.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/10_device_pairing_pin_protocol.md) |
+| **11** | **Kênh Lệnh Thời Gian Thực WebSocket Hub** | Giao thức WebSocket RFC 6455, Điều phối In-Memory Pub/Sub, **Độ trễ đo đạc thực nghiệm 1.37 ms (< 5s)**, Hàng đợi nhịp tim dự phòng 60s. | [11_websocket_realtime_command_hub.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/11_websocket_realtime_command_hub.md) |
+| **12** | **Bảng Điều Khiển Phụ Huynh Web Dashboard** | Giao diện HTML5 Responsive trên mobile/desktop, Thư viện HTMX cập nhật động, Biểu đồ thống kê sử dụng, Hòm thư duyệt đơn xin giờ của con. | [12_parent_web_dashboard.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/12_parent_web_dashboard.md) |
+| **13** | **Xóa Dữ Liệu Kép Nguyên Tử (Dual Deletion)** | Giao dịch ACID SQLAlchemy, Lệnh tiêu hủy xuyên mạng qua WebSocket, Lệnh SQLite `VACUUM` xóa sạch byte vật lý, Tự động dọn sau 90 ngày. | [13_atomic_dual_deletion_privacy.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/13_atomic_dual_deletion_privacy.md) |
+| **14** | **Triết Lý Fail-Open Sau 7 Ngày & Dữ Liệu Cấm** | Triết lý Fail-Open sau 7 ngày mất mạng để không phong tỏa học tập của trẻ, Danh mục 4 nhóm dữ liệu tuyệt đối cấm thu thập theo PRIVACY.md. | [14_fail_open_philosophy_child_rights.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/14_fail_open_philosophy_child_rights.md) |
+| **15** | **Bộ Kiểm Thử Tự Động & Kịch Bản Demo D1** | Framework `pytest`, Ma trận **51/51 Tests PASSED (100% trong 11.75s)**, Tự động hóa 6 kịch bản nghiệm thu thực nghiệm và Demo D1. | [15_acceptance_testing_and_verification.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/15_acceptance_testing_and_verification.md) |
+| **16** | **Kịch Bản Tổng Quát E2E Một Ngày Điển Hình** | **Kịch bản tổng quát toàn diện nhất**: Phân tích chi tiết từng mốc thời gian cách toàn bộ 15 thành phần vận hành nhịp nhàng bên dưới hệ thống. | [16_end_to_end_generalized_case_study.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/16_end_to_end_generalized_case_study.md) |
+

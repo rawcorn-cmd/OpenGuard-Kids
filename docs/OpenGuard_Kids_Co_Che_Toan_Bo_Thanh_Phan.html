@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>OpenGuard Kids — Đặc Tả Kỹ Thuật & Cơ Chế Toàn Bộ Các Thành Phần</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 12mm 12mm 12mm 12mm;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'DejaVu Sans', 'Liberation Sans', Arial, sans-serif;
+    line-height: 1.4;
+    color: #1e293b;
+    background-color: #ffffff;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* HEADINGS WITH MANDATORY PAGE BREAKS */
+  h1.page-title {
+    break-before: page;
+    font-size: 13pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+    padding: 7px 12px;
+    background: linear-gradient(90deg, #e0f2fe 0%, #ffffff 100%);
+    border-left: 5px solid #0284c7;
+    border-radius: 0 4px 4px 0;
+    text-transform: uppercase;
+  }
+
+  /* First page doesn't break before */
+  .cover-container {
+    height: 250mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 8mm 5mm;
+  }
+
+  .cover-header-box {
+    border-bottom: 2.5px solid #0284c7;
+    padding-bottom: 10px;
+  }
+
+  .cover-univ-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0f172a;
+    text-transform: uppercase;
+  }
+
+  .cover-faculty-title {
+    font-size: 9.5pt;
+    color: #475569;
+    margin-top: 3px;
+    font-weight: 600;
+  }
+
+  .cover-body-box {
+    margin: 12mm 0;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff;
+    font-size: 8.5pt;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .cover-main-title {
+    font-size: 23pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin: 15px 0 8px 0;
+  }
+
+  .cover-sub-title {
+    font-size: 12.5pt;
+    font-weight: 600;
+    color: #0284c7;
+    margin-bottom: 16px;
+  }
+
+  .cover-description {
+    font-size: 9.5pt;
+    color: #475569;
+    max-width: 155mm;
+    margin: 0 auto;
+    line-height: 1.55;
+    text-align: justify;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 16px;
+  }
+
+  .cover-highlights {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .highlight-chip {
+    background-color: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 5px;
+  }
+
+  .cover-footer-box {
+    border-top: 1.5px solid #e2e8f0;
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8.5pt;
+    color: #334155;
+    text-align: left;
+  }
+
+  h2.card-heading {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #0369a1;
+    margin: 0 0 6px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  p {
+    margin: 3px 0 6px 0;
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin: 3px 0 6px 0;
+    padding-left: 18px;
+  }
+
+  li {
+    margin-bottom: 2px;
+  }
+
+  /* CARDS */
+  .tech-card {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+
+  .tech-card.accent-blue { border-top: 3.5px solid #0284c7; }
+  .tech-card.accent-green { border-top: 3.5px solid #16a34a; }
+  .tech-card.accent-amber { border-top: 3.5px solid #d97706; }
+  .tech-card.accent-purple { border-top: 3.5px solid #7c3aed; }
+  .tech-card.accent-rose { border-top: 3.5px solid #e11d48; }
+
+  .meta-tag {
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .meta-tag.must { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  .meta-tag.core { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+  .meta-tag.safe { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+  .meta-tag.warn { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+
+  /* TABLES */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0;
+    font-size: 8.5pt;
+    page-break-inside: avoid;
+  }
+
+  table.data-table th, table.data-table td {
+    border: 1px solid #cbd5e1;
+    padding: 5px 7px;
+    text-align: left;
+  }
+
+  table.data-table th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+
+  table.data-table tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+
+  /* CODE BOX */
+  code {
+    font-family: 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+    font-size: 8pt;
+    background-color: #f1f5f9;
+    color: #b91c1c;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  pre.code-box {
+    font-family: 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+    font-size: 7.8pt;
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 7px 10px;
+    border-radius: 4px;
+    margin: 5px 0;
+    line-height: 1.3;
+    page-break-inside: avoid;
+  }
+
+  /* DIAGRAM CONTAINER */
+  .diagram-frame {
+    background-color: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 8px 0 10px 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+
+  .diagram-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 5px;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .stat-card {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 4px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-size: 12pt;
+    font-weight: 800;
+    color: #0284c7;
+  }
+
+  .stat-desc {
+    font-size: 7pt;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- TRANG 1: TRANG BÌA -->
+<div class="cover-container">
+  <div class="cover-header-box">
+    <div class="cover-univ-title">Đại Học Quốc Gia TP. Hồ Chí Minh &bull; Trường Đại Học Khoa Học Tự Nhiên</div>
+    <div class="cover-faculty-title">Khoa Công Nghệ Thông Tin &bull; Bộ Môn Mạng Máy Tính &amp; Viễn Thông</div>
+  </div>
+
+  <div class="cover-body-box">
+    <div style="margin-bottom: 10px;">
+      <span class="cover-badge">Báo Cáo Kỹ Thuật Đồ Án Môn Học</span>
+    </div>
+
+    <!-- SVG LOGO SHIELD -->
+    <svg width="74" height="74" viewBox="0 0 100 100" style="margin: 0 auto 8px auto; display: block;">
+      <defs>
+        <linearGradient id="covGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0284c7" />
+          <stop offset="100%" stop-color="#0f172a" />
+        </linearGradient>
+      </defs>
+      <path d="M50 5 L88 22 C88 58 50 92 50 92 C50 92 12 58 12 22 Z" fill="url(#covGrad)" />
+      <path d="M50 12 L80 26 C80 54 50 84 50 84 C50 84 20 54 20 26 Z" fill="#ffffff" opacity="0.12" />
+      <circle cx="50" cy="42" r="10" fill="#ffffff" />
+      <rect x="44" y="48" width="12" height="15" rx="3" fill="#ffffff" />
+      <circle cx="50" cy="55" r="2.5" fill="#0284c7" />
+      <circle cx="30" cy="40" r="4" fill="#38bdf8" />
+      <circle cx="70" cy="40" r="4" fill="#38bdf8" />
+      <line x1="30" y1="40" x2="42" y2="42" stroke="#38bdf8" stroke-width="2.5" />
+      <line x1="70" y1="40" x2="58" y2="42" stroke="#38bdf8" stroke-width="2.5" />
+    </svg>
+
+    <div class="cover-main-title">OPENGUARD KIDS</div>
+    <div class="cover-sub-title">Đặc Tả Kỹ Thuật &amp; Cơ Chế Vận Hành Chi Tiết Toàn Bộ Các Thành Phần</div>
+
+    <div class="cover-description">
+      Tài liệu đặc tả toàn diện kiến trúc kỹ thuật hệ thống quản lý, giám sát và đồng hành máy tính dành cho trẻ em trên môi trường <strong>Windows 10/11 x64</strong>. Hệ thống giải quyết trọn vẹn bài toán chống phần mềm độc hại, loại bỏ nguy cơ gián điệp, tuân thủ nghiêm ngặt <strong>Nghị định 13/2023/NĐ-CP</strong> và các tiêu chuẩn bảo mật mạng hiện đại.
+    </div>
+
+    <div class="cover-highlights">
+      <span class="highlight-chip">&#10003; 51/51 Tests Passed (100%)</span>
+      <span class="highlight-chip">&#10003; WebSocket Latency 1.37 ms</span>
+      <span class="highlight-chip">&#10003; Sai Số &le; &plusmn;30s/h</span>
+      <span class="highlight-chip">&#10003; Argon2id (RFC 9106)</span>
+      <span class="highlight-chip">&#10003; Xóa Kép 100%</span>
+    </div>
+  </div>
+
+  <div class="cover-footer-box">
+    <div>
+      <strong>Môn học:</strong> Mạng Máy Tính (<em>Computer Networks</em>)<br>
+      <strong>Nền tảng:</strong> Windows 10/11 x64 &bull; Python 3.11+<br>
+      <strong>Thư viện:</strong> FastAPI, SQLite WAL, pywin32, dnslib
+    </div>
+    <div style="text-align: right;">
+      <strong>Nhóm thực hiện:</strong> Nhóm 03 sinh viên (HCMUS)<br>
+      <strong>Trạng thái:</strong> <span style="color: #16a34a; font-weight: 700;">Hoàn Thành Toàn Diện (100%)</span><br>
+      <strong>Niên khóa:</strong> 2026 – 2027
+    </div>
+  </div>
+</div>
+
+<!-- TRANG 2: TỔNG QUAN VÀ NGUYÊN TẮC -->
+<h1 class="page-title">Phần I: Tổng Quan Kiến Trúc &amp; 6 Nguyên Tắc Nhân Văn (NT1 – NT6)</h1>
+
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="stat-val">51 / 51</div>
+    <div class="stat-desc">Kiểm Thử Tự Động (100%)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">1.37 ms</div>
+    <div class="stat-desc">Độ Trễ WebSocket (&lt;5s)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">&le; &plusmn;30s</div>
+    <div class="stat-desc">Sai Số Đếm Giờ / 1 Giờ</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">200+</div>
+    <div class="stat-desc">Tên Miền Phân Loại (F2.4)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-val">100%</div>
+    <div class="stat-desc">Xóa Dữ Liệu Kép Cả 2 Đầu</div>
+  </div>
+</div>
+
+<p><strong>Bối cảnh &amp; Bài toán:</strong> Phần lớn các phần mềm quản lý phụ huynh thương mại hiện nay hoạt động như <em>phần mềm gián điệp (Spyware)</em>: chạy ẩn danh, chụp trộm màn hình, ghi lại từng phím gõ (keylogger), lưu toàn bộ URL chi tiết chứa mã token cá nhân. Cách tiếp cận này phá hủy lòng tin gia đình và vi phạm nghiêm ngặt luật an toàn thông tin trẻ em.</p>
+
+<p><strong>OpenGuard Kids</strong> định vị là <strong>công cụ đồng hành, thỏa thuận minh bạch</strong> giữa cha mẹ và con cái, xây dựng trên 6 nguyên tắc nhân văn bắt buộc:</p>
+
+<table class="data-table">
+  <tr>
+    <th style="width: 10%;">Nguyên tắc</th>
+    <th style="width: 32%;">Mục tiêu nhân văn</th>
+    <th style="width: 58%;">Giải pháp kỹ thuật mã nguồn tương ứng</th>
+  </tr>
+  <tr>
+    <td><strong>NT1</strong></td>
+    <td>Minh bạch tối đa, không theo dõi lén</td>
+    <td>Biểu tượng trên Taskbar đếm lùi liên tục; nếu Tray UI bị tắt hoặc mất IPC &gt; 15 giây thì Windows Service tự kích hoạt cảnh báo đỏ trên màn hình, cấm tuyệt đối chế độ ẩn.</td>
+  </tr>
+  <tr>
+    <td><strong>NT2</strong></td>
+    <td>Tối giản dữ liệu (Data Minimization)</td>
+    <td>Lược đồ sự kiện chỉ chứa đúng 7 trường siêu dữ liệu. Không chụp màn hình, không lưu phím gõ, không lưu URL đầy đủ.</td>
+  </tr>
+  <tr>
+    <td><strong>NT3 &amp; NT4</strong></td>
+    <td>Thân thiện, giáo dục, không trừng phạt</td>
+    <td>Khi vào web cấm: hiển thị trang chặn lịch sự kèm số <strong>Tổng đài Quốc gia 111</strong>; Cảnh báo trước 10p, 5p, 1p và <strong>60 giây ân hạn lưu bài tập</strong> trước khi màn hình khóa.</td>
+  </tr>
+  <tr>
+    <td><strong>NT5</strong></td>
+    <td>Trao quyền &amp; Đối chiếu 1:1</td>
+    <td>Cung cấp nút "Xin thêm 15 phút" và "Báo chặn nhầm"; Màn hình "Hôm nay em đã dùng gì" cho phép trẻ em xem dữ liệu hoạt động giống hệt những gì cha mẹ thấy trên Dashboard.</td>
+  </tr>
+  <tr>
+    <td><strong>NT6</strong></td>
+    <td>Khả năng phục hồi (Fail-Open)</td>
+    <td>Sau 7 ngày mất kết nối mạng với Server, hệ thống tự động mở quyền an toàn cục bộ (Fail-Open) để trẻ không bị gián đoạn việc học tập và tra cứu cứu trợ khẩn cấp.</td>
+  </tr>
+</table>
+
+<div class="tech-card accent-blue">
+  <div class="card-heading">
+    <span>Tóm Tắt Mô Hình Phân Tầng Hệ Thống</span>
+    <span class="meta-tag core">KIẾN TRÚC PHÂN TẦNG</span>
+  </div>
+  <ul>
+    <li><strong>Session 0 (Windows Service):</strong> Chạy ngầm dưới quyền <code>NT AUTHORITY\LocalSystem</code>. Đảm nhiệm các tác vụ đặc quyền: bắt gói tin DNS trên UDP 53, quét mã băm SHA-256 tiến trình, đếm giờ, lưu bộ đệm SQLite nội bộ. Người dùng không thể "End Task".</li>
+    <li><strong>Session 1 (Desktop Tray UI):</strong> Chạy trong phiên người dùng thông thường. Đảm nhiệm hiển thị icon Taskbar, chuỗi Toast cảnh báo, hộp thoại ân hạn 60s và màn hình minh bạch cho trẻ.</li>
+    <li><strong>Kênh truyền Loopback IPC (127.0.0.1:8765):</strong> Kết nối liên phiên Session 0 &harr; Session 1 có xác thực mã bí mật Token 64-hex lưu ở file NTFS bảo mật.</li>
+    <li><strong>Kênh truyền Server (FastAPI):</strong> Tiếp nhận sự kiện qua HTTPS batch, cấp phát mã PIN ghép đôi 8 ký tự, đẩy lệnh khẩn cấp qua WebSocket thời gian thực độ trễ chỉ 1.37 ms.</li>
+  </ul>
+</div>
+
+<!-- TRANG 3: SƠ ĐỒ 1 — KIẾN TRÚC PHÂN TẦNG VECTOR -->
+<h1 class="page-title">Sơ Đồ 1: Kiến Trúc Phân Tầng &amp; Kênh Truyền Thông Toàn Hệ Thống</h1>
+
+<div class="diagram-frame">
+  <svg width="100%" height="auto" viewBox="0 0 740 370" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gradSess0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#f1f5f9"/></linearGradient>
+      <linearGradient id="gradSess1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0fdf4"/><stop offset="100%" stop-color="#dcfce7"/></linearGradient>
+      <linearGradient id="gradServer" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eff6ff"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient>
+      <marker id="mArrowBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#0284c7"/></marker>
+      <marker id="mArrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a"/></marker>
+    </defs>
+
+    <!-- MÁY CON (WINDOWS 10/11 x64) -->
+    <rect x="15" y="15" width="450" height="340" rx="10" fill="#ffffff" stroke="#64748b" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="35" y="38" font-family="DejaVu Sans" font-size="11" font-weight="bold" fill="#334155">MÁY TÍNH CỦA TRẺ (WINDOWS 10/11 x64)</text>
+
+    <!-- SESSION 0 -->
+    <rect x="30" y="48" width="420" height="140" rx="8" fill="url(#gradSess0)" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="30" y="48" width="420" height="22" rx="8" fill="#e2e8f0"/>
+    <text x="45" y="63" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" fill="#0f172a">SESSION 0: WINDOWS SERVICE (NT AUTHORITY\LocalSystem - CẤM END TASK)</text>
+
+    <rect x="42" y="78" width="120" height="46" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+    <text x="102" y="95" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#0369a1">DNS Proxy (Port 53)</text>
+    <text x="102" y="108" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Canary NXDOMAIN</text>
+    <text x="102" y="119" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">SafeSearch CNAME</text>
+
+    <rect x="175" y="78" width="135" height="46" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+    <text x="242" y="95" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#0369a1">ScreenTime Tracker</text>
+    <text x="242" y="108" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">user32.GetLastInputInfo</text>
+    <text x="242" y="119" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Bẫy lùi giờ monotonic</text>
+
+    <rect x="322" y="78" width="118" height="46" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+    <text x="381" y="95" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#0369a1">Process Monitor</text>
+    <text x="381" y="108" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">SHA-256 binary hash</text>
+    <text x="381" y="119" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Cache RAM O(1)</text>
+
+    <rect x="42" y="132" width="398" height="46" rx="5" fill="#ffffff" stroke="#475569" stroke-width="1"/>
+    <text x="241" y="149" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1e293b">SQLite WAL Offline Buffer &amp; Máy Chủ Blockpage Cổng 8080</text>
+    <text x="241" y="163" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#64748b">Lưu đệm 7 trường NT2 &bull; Khóa Idempotency_key &bull; Trang chặn giáo dục &bull; Hotline 111</text>
+
+    <!-- IPC LINK -->
+    <path d="M 241 188 L 241 220" stroke="#0284c7" stroke-width="2.5" marker-end="url(#mArrowBlue)"/>
+    <rect x="90" y="196" width="302" height="18" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="1"/>
+    <text x="241" y="209" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0284c7">Loopback HTTP IPC (127.0.0.1:8765) &bull; Token 64-hex NTFS &bull; Mất nối &gt;15s báo đỏ</text>
+
+    <!-- SESSION 1 -->
+    <rect x="30" y="226" width="420" height="118" rx="8" fill="url(#gradSess1)" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="30" y="226" width="420" height="22" rx="8" fill="#bbf7d0"/>
+    <text x="45" y="241" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" fill="#14532d">SESSION 1: USER DESKTOP (TRAY UI MINH BẠCH DÀNH CHO TRẺ EM)</text>
+
+    <rect x="42" y="256" width="125" height="76" rx="5" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+    <text x="104" y="275" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#15803d">Tray Controller</text>
+    <text x="104" y="290" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Icon Taskbar đếm lùi</text>
+    <text x="104" y="304" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#dc2626">Mất service &gt;15s: Báo đỏ</text>
+    <text x="104" y="318" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#16a34a">Không cho phép chạy ẩn</text>
+
+    <rect x="178" y="256" width="135" height="76" rx="5" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+    <text x="245" y="275" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#15803d">Toasts &amp; Ân Hạn 60s</text>
+    <text x="245" y="290" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Toast 10m &bull; 5m &bull; 1m</text>
+    <text x="245" y="304" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#d97706">Hộp thoại đếm ngược 60s</text>
+    <text x="245" y="318" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#d97706">Cho trẻ kịp lưu bài tập</text>
+
+    <rect x="324" y="256" width="116" height="76" rx="5" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+    <text x="382" y="275" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#15803d">Child Agency</text>
+    <text x="382" y="290" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Xin thêm 15 phút</text>
+    <text x="382" y="304" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Báo chặn nhầm</text>
+    <text x="382" y="318" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#2563eb">Hôm nay em đã dùng gì</text>
+
+    <!-- ĐƯỜNG KẾT NỐI MẠNG -->
+    <path d="M 465 120 L 515 120" stroke="#0284c7" stroke-width="2.5" marker-end="url(#mArrowBlue)"/>
+    <text x="490" y="113" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0284c7">HTTPS</text>
+    <text x="490" y="134" font-family="DejaVu Sans" font-size="6.5" text-anchor="middle" fill="#64748b">Batch 60s</text>
+
+    <path d="M 515 160 L 465 160" stroke="#16a34a" stroke-width="2.5" marker-end="url(#mArrowGreen)"/>
+    <text x="490" y="153" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#16a34a">WebSocket</text>
+    <text x="490" y="174" font-family="DejaVu Sans" font-size="6.5" text-anchor="middle" fill="#16a34a">&lt;5s (1.37ms)</text>
+
+    <!-- MÁY CHỦ QUẢN TRỊ SERVER -->
+    <rect x="520" y="15" width="205" height="340" rx="10" fill="url(#gradServer)" stroke="#2563eb" stroke-width="2"/>
+    <text x="622" y="38" font-family="DejaVu Sans" font-size="10.5" font-weight="bold" text-anchor="middle" fill="#1e3a8a">SERVER (FASTAPI + SQLITE WAL)</text>
+
+    <rect x="535" y="48" width="175" height="58" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="622" y="66" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">Xác Thực &amp; Quản Lý Phụ Huynh</text>
+    <text x="622" y="80" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Argon2id (RFC 9106) &bull; Khóa 15p</text>
+    <text x="622" y="92" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Cookie HttpOnly &bull; Chống IDOR</text>
+
+    <rect x="535" y="114" width="175" height="58" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="622" y="132" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">WebSocket Hub &amp; Đồng Bộ Lô</text>
+    <text x="622" y="146" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Lệnh khẩn: LOCK, UNLOCK, +15m</text>
+    <text x="622" y="158" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Fallback hàng đợi nhịp tim 60s</text>
+
+    <rect x="535" y="180" width="175" height="162" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="622" y="198" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">Parent Web Dashboard</text>
+    <text x="622" y="213" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Giao diện HTML5 co giãn trên mobile</text>
+    <text x="622" y="226" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Thống kê giờ hôm nay / 7 ngày</text>
+    <text x="622" y="239" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Bảng xếp hạng Top 10 App / Website</text>
+    <text x="622" y="252" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">Hòm thư duyệt xin thêm 15 phút</text>
+    
+    <rect x="545" y="262" width="155" height="70" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+    <text x="622" y="280" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#b91c1c">ATOMIC DUAL DELETION</text>
+    <text x="622" y="294" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#7f1d1d">Nút "Xóa toàn bộ dữ liệu của con"</text>
+    <text x="622" y="307" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#7f1d1d">Xóa Database Server &amp; đẩy WebSocket</text>
+    <text x="622" y="320" font-family="DejaVu Sans" font-size="7" font-weight="bold" text-anchor="middle" fill="#991b1b">Xóa sạch SQLite cục bộ ở máy con</text>
+  </svg>
+  <div class="diagram-title">Sơ đồ 1: Cấu trúc phân tầng cách ly Session 0 &amp; Session 1, kênh truyền Loopback IPC và đồng bộ thời gian thực</div>
+</div>
+
+<!-- TRANG 4: CHUYÊN ĐỀ 1 & 2 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 1 &amp; 2 — Windows Service &amp; Loopback IPC</h1>
+
+<div class="tech-card accent-blue">
+  <div class="card-heading">
+    <span>1. Dịch Vụ Hệ Thống Windows Service (Session 0)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F5</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/</code>, quản lý qua thư viện <code>pywin32 (win32serviceutil)</code></td></tr>
+    <tr><th>Tài khoản thực thi</th><td><code>NT AUTHORITY\LocalSystem</code> (Quyền hạn quản trị cao nhất hệ điều hành)</td></tr>
+    <tr><th>Cơ chế bảo vệ</th><td>Session 0 Isolation &bull; Chống End Task bằng Task Manager &bull; Tự khởi động lại qua SCM</td></tr>
+  </table>
+  <p><strong>Cơ chế hoạt động chuyên sâu:</strong></p>
+  <ul>
+    <li><strong>Chống ép tắt ứng dụng (Anti-Kill Mechanism):</strong> Trẻ em đăng nhập trên máy tính bằng tài khoản Standard User (không có quyền Administrator). Khi trẻ mở Task Manager hoặc gõ lệnh <code>taskkill /F /PID &lt;id&gt;</code> để tắt dịch vụ, Windows Security Subsystem (LSASS và Kernel) sẽ lập tức chặn đứng với mã lỗi <code>ERROR_ACCESS_DENIED (0x5)</code> vì tiến trình thuộc đặc quyền <code>LocalSystem</code>.</li>
+    <li><strong>Cách ly Session 0 (Session 0 Isolation):</strong> Kể từ Windows Vista, Microsoft quy định mọi Windows Service phải chạy trong phiên Session 0 không có giao diện tương tác đồ họa (Non-interactive desktop). Điều này ngăn chặn hacker thực hiện tấn công tiêm mã (Shatter Attack), nhưng đồng nghĩa Service không thể trực tiếp vẽ cửa sổ đồ họa hay icon trên màn hình của trẻ ở Session 1.</li>
+    <li><strong>Phục hồi dịch vụ tự động (SCM Recovery):</strong> Dịch vụ được đăng ký với Windows Service Control Manager cấu hình chính sách: nếu tiến trình bị crash đột ngột vì bất kỳ lý do gì, hệ điều hành tự động bật lại service sau 60 giây.</li>
+  </ul>
+</div>
+
+<div class="tech-card accent-green">
+  <div class="card-heading">
+    <span>2. Giao Tiếp Liên Phiên IPC (Loopback HTTP &amp; Secret Token)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; NT1</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/ipc.py</code> (Lớp <code>IPCServer</code>, <code>IPCClient</code>, <code>IPCManager</code>)</td></tr>
+    <tr><th>Địa chỉ lắng nghe</th><td><code>127.0.0.1:8765</code> (Giao tiếp hoàn toàn trong bộ nhớ RAM qua Loopback Adapter)</td></tr>
+    <tr><th>Cơ chế xác thực</th><td>Token ngẫu nhiên 64-hex CSPRNG &bull; Phân quyền NTFS bảo vệ &bull; Mất kết nối &gt; 15s báo động đỏ</td></tr>
+  </table>
+  <p><strong>Cơ chế hoạt động chuyên sâu:</strong></p>
+  <ul>
+    <li><strong>Địa chỉ Loopback RAM Socket:</strong> Thay vì mở cổng mạng ra ngoài, máy chủ IPC chỉ lắng nghe tại địa chỉ <code>127.0.0.1</code>. Giao tiếp giữa Session 0 và Session 1 diễn ra tức thì thông qua ngăn xếp mạng TCP/IP loopback của hệ điều hành, không bao giờ lộ ra ngoài mạng LAN hay Wi-Fi gia đình.</li>
+    <li><strong>Mã xác thực Token 64-hex:</strong> Khi khởi động, Service sinh một chuỗi ngẫu nhiên 64 ký tự hex (<code>secrets.token_hex(32)</code>) và lưu vào tệp cấu hình bảo vệ bằng quyền NTFS Access Control List: chỉ có tài khoản <code>SYSTEM</code> và <code>Administrators</code> được phép đọc. Khi Tray UI khởi động trong phiên người dùng, nó đọc mã token này để gửi kèm header <code>X-OGK-Token</code> trong mọi yêu cầu. Bất kỳ tiến trình lạ nào gửi request thiếu token đều nhận mã lỗi <code>403 Forbidden</code>.</li>
+    <li><strong>Bảo vệ chống chạy lén (Anti-Abuse Safeguard):</strong> Tray UI định kỳ gửi gói tin nhịp tim 10 giây qua IPC. Nếu kênh IPC bị ngắt kết nối quá **15 giây** (ví dụ: kẻ xấu can thiệp hoặc Tray UI bị tắt), hệ thống kích hoạt cảnh báo đỏ trên màn hình và dừng chế độ giám sát ngầm, bảo đảm tuân thủ nguyên tắc NT1 (không bao giờ có chế độ chạy ẩn danh).</li>
+  </ul>
+</div>
+
+<!-- TRANG 5: SƠ ĐỒ 2 — FSM ĐẾM GIỜ MÀN HÌNH -->
+<h1 class="page-title">Sơ Đồ 2: Máy Trạng Thái Hữu Hạn FSM 10 Bước &amp; Bẫy Lùi Đồng Hồ</h1>
+
+<div class="diagram-frame">
+  <svg width="100%" height="auto" viewBox="0 0 740 370" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrowFSM" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#0284c7"/></marker>
+      <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#dc2626"/></marker>
+      <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a"/></marker>
+    </defs>
+
+    <!-- TRẠNG THÁI 1: ACTIVE -->
+    <rect x="20" y="30" width="130" height="60" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+    <text x="85" y="55" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#065f46">ACTIVE_COUNTING</text>
+    <text x="85" y="72" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#047857">Trẻ dùng máy thực tế</text>
+    <text x="85" y="83" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#047857">Đang trừ hạn ngạch</text>
+
+    <!-- Mũi tên ACTIVE <-> IDLE -->
+    <path d="M 85 90 L 85 145" stroke="#0284c7" stroke-width="1.8" marker-end="url(#arrowFSM)"/>
+    <path d="M 55 145 L 55 90" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrowGreen)"/>
+    <text x="70" y="122" font-family="DejaVu Sans" font-size="7" font-weight="bold" text-anchor="middle" fill="#0369a1">&gt;300s Idle</text>
+
+    <!-- TRẠNG THÁI 2: IDLE PAUSED -->
+    <rect x="20" y="145" width="130" height="60" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+    <text x="85" y="170" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#1e293b">IDLE_PAUSED</text>
+    <text x="85" y="186" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#64748b">user32.GetLastInputInfo</text>
+    <text x="85" y="198" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#16a34a">TẠM DỪNG ĐẾM GIỜ</text>
+
+    <!-- Mũi tên từ Active sang Warning -->
+    <path d="M 150 60 L 195 60" stroke="#0284c7" stroke-width="2" marker-end="url(#arrowFSM)"/>
+    <text x="172" y="52" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0284c7">&le; 10m</text>
+
+    <!-- TRẠNG THÁI 3: WARNING 10M -->
+    <rect x="195" y="30" width="115" height="60" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+    <text x="252" y="55" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#1e40af">WARNING_10M</text>
+    <text x="252" y="72" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#2563eb">Toast xanh lam</text>
+    <text x="252" y="83" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Nhắc sắp hết giờ</text>
+
+    <!-- Mũi tên sang Warning 5M -->
+    <path d="M 310 60 L 345 60" stroke="#0284c7" stroke-width="2" marker-end="url(#arrowFSM)"/>
+    <text x="327" y="52" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0284c7">&le; 5m</text>
+
+    <!-- TRẠNG THÁI 4: WARNING 5M -->
+    <rect x="345" y="30" width="115" height="60" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+    <text x="402" y="55" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#b45309">WARNING_5M</text>
+    <text x="402" y="72" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#d97706">Toast màu vàng</text>
+    <text x="402" y="83" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Nhắc lưu bài tập</text>
+
+    <!-- Mũi tên sang Warning 1M -->
+    <path d="M 460 60 L 495 60" stroke="#0284c7" stroke-width="2" marker-end="url(#arrowFSM)"/>
+    <text x="477" y="52" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0284c7">&le; 1m</text>
+
+    <!-- TRẠNG THÁI 5: WARNING 1M -->
+    <rect x="495" y="30" width="115" height="60" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+    <text x="552" y="55" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#b91c1c">WARNING_1M</text>
+    <text x="552" y="72" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#dc2626">Toast màu đỏ</text>
+    <text x="552" y="83" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Sắp hết hạn ngạch</text>
+
+    <!-- Mũi tên xuống Grace Period -->
+    <path d="M 552 90 L 552 145" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+    <text x="585" y="118" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" fill="#dc2626">Quota = 0</text>
+
+    <!-- TRẠNG THÁI 6: GRACE PERIOD 60S -->
+    <rect x="460" y="145" width="185" height="65" rx="8" fill="#fff1f2" stroke="#f43f5e" stroke-width="2.5"/>
+    <text x="552" y="168" font-family="DejaVu Sans" font-size="9.5" font-weight="bold" text-anchor="middle" fill="#be123c">GRACE_PERIOD_60S</text>
+    <text x="552" y="184" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#e11d48">Hộp thoại đếm ngược 60 giây</text>
+    <text x="552" y="198" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Cho phép trẻ kịp lưu file Word/PPT</text>
+
+    <!-- Mũi tên sang Lock Quota -->
+    <path d="M 460 177 L 390 177" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+    <text x="425" y="170" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#dc2626">Hết 60s</text>
+
+    <!-- TRẠNG THÁI 7: LOCKED QUOTA -->
+    <rect x="230" y="145" width="160" height="65" rx="8" fill="#450a0a" stroke="#dc2626" stroke-width="2.5"/>
+    <text x="310" y="168" font-family="DejaVu Sans" font-size="10" font-weight="bold" text-anchor="middle" fill="#ffffff">LOCKED_QUOTA</text>
+    <text x="310" y="184" font-family="DejaVu Sans" font-size="8" text-anchor="middle" fill="#fca5a5">Màn hình khóa lịch sự</text>
+    <text x="310" y="198" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#fca5a5">Hotline 111 &bull; Nút xin thêm 15p</text>
+
+    <!-- Mũi tên mở khóa qua WebSocket -->
+    <path d="M 310 210 L 310 265 L 85 265 L 85 95" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrowGreen)"/>
+    <text x="210" y="258" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" fill="#16a34a">Phụ huynh duyệt yêu cầu &rarr; Lệnh WebSocket UNLOCK / ADD_TIME (&lt;5s) &rarr; Trở lại Active</text>
+
+    <!-- KHUNG CHỐNG LÙI GIỜ HỆ THỐNG -->
+    <rect x="20" y="280" width="700" height="78" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+    <text x="35" y="300" font-family="DejaVu Sans" font-size="9" font-weight="bold" fill="#854d0e">BẪY CHỐNG GIAN LẬN LÙI ĐỒNG HỒ WINDOWS (CLOCK ROLLBACK TAMPER DETECTION - F1.5):</text>
+    <text x="35" y="316" font-family="DejaVu Sans" font-size="8" fill="#713f12">&bull; Cơ chế: Đo song song Giờ hệ thống time.time() (có thể bị trẻ chỉnh lùi) và Đồng hồ phần cứng đơn điệu time.monotonic() (không thể chỉnh lùi).</text>
+    <text x="35" y="331" font-family="DejaVu Sans" font-size="8" fill="#713f12">&bull; Phát hiện: Nếu current_wall_time - last_wall_time &lt; -60s &rarr; PHÁT HIỆN GIAN LẬN! Hạn ngạch đã dùng TUYỆT ĐỐI KHÔNG BỊ GIẢM.</text>
+    <text x="35" y="347" font-family="DejaVu Sans" font-size="8" font-weight="bold" fill="#b45309">&bull; Kết quả: Trẻ lùi đồng hồ 3 tiếng vẫn bị khóa đúng giờ, hệ thống kích hoạt cờ cảnh báo clock_tamper_detected gửi về cha mẹ.</text>
+  </svg>
+  <div class="diagram-title">Sơ đồ 2: Máy trạng thái hữu hạn 10 bước (10-State FSM) của động cơ ScreenTimeTracker &amp; Bẫy chống lùi giờ hệ thống</div>
+</div>
+
+<!-- TRANG 6: CHUYÊN ĐỀ 3 & 4 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 3 &amp; 4 — Screen-Time &amp; Giám Sát Tiến Trình</h1>
+
+<div class="tech-card accent-amber">
+  <div class="card-heading">
+    <span>3. Động Cơ Đếm Giờ Màn Hình (ScreenTimeTracker)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F1.1 – F1.5</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/screen_time.py</code> (Lớp <code>ScreenTimeTracker</code>, <code>ScreenTimeState</code>)</td></tr>
+    <tr><th>Chu kỳ tick</th><td>10 giây / lần &bull; Ngưỡng nhàn rỗi: 300 giây (5 phút) &bull; Ân hạn: 60 giây</td></tr>
+    <tr><th>Chính sách bảo vệ</th><td>Ma trận lịch tuần 7&times;48 slots &bull; Hạn ngạch ngày cấu hình riêng ngày thường/cuối tuần</td></tr>
+  </table>
+  <p><strong>Chi tiết giải thuật đếm giờ và chống lùi đồng hồ:</strong></p>
+  <ul>
+    <li><strong>Phân biệt học tập và treo máy (Idle Detection):</strong> Bằng cách gọi <code>user32.GetLastInputInfo()</code>, hệ thống tính được khoảng thời gian người dùng không chạm vào bàn phím hay chuột (<code>idle_seconds</code>). Khi trẻ rời máy đi ăn cơm mà quên tắt, sau 5 phút máy trạng thái tự chuyển sang <code>IDLE_PAUSED</code>. Khi trẻ quay lại, máy lập tức tiếp tục tính giờ mà trẻ không bị trừ oan phút nào (tuân thủ nguyên tắc NT4).</li>
+    <li><strong>Toán học bẫy lùi đồng hồ:</strong>
+      <pre class="code-box">delta_wall = current_wall - self.last_wall_time
+delta_mono = max(0.0, current_mono - self.last_monotonic_time)
+
+if delta_wall < -60.0:
+    self.tamper_detected = True
+    # QUY TẮC CỐT LÕI: Consumed quota KHÔNG BAO GIỜ bị giảm lùi
+    self.alerts.append({"type": "clock_tamper_detected", "delta": delta_wall})</pre>
+    </li>
+    <li><strong>Ma trận lịch tuần $7 \times 48$:</strong> Chia 7 ngày trong tuần, mỗi ngày 48 khe thời gian (mỗi khe 30 phút). Nếu thời điểm hiện tại rơi vào khung giờ bị cấm (ví dụ sau 22:00 đêm), máy tính bị khóa ngay trong vòng $\le 5$ giây (đo thực tế $< 1$s).</li>
+  </ul>
+</div>
+
+<div class="tech-card accent-blue">
+  <div class="card-heading">
+    <span>4. Giám Sát Tiến Trình &amp; Nhận Diện Băm SHA-256 (ProcessMonitor)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F2.1, F2.2</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/process_monitor.py</code> (Lớp <code>ProcessMonitor</code>)</td></tr>
+    <tr><th>Kỹ thuật nhận diện</th><td>Băm nhị phân SHA-256 tệp thực thi gốc &bull; So khớp danh sách đen &bull; Chế độ giờ học Whitelist</td></tr>
+    <tr><th>Tối ưu hiệu năng</th><td>Bộ nhớ đệm In-Memory Hash Cache $O(1)$ theo <code>(path, mtime, size)</code></td></tr>
+  </table>
+  <p><strong>Cơ chế bắt bài chiêu trò đổi tên file:</strong></p>
+  <ul>
+    <li><strong>Vấn đề thực tế:</strong> Trẻ tải game bạo lực <code>game.exe</code> và đổi tên thành <code>notepad.exe</code> hoặc <code>calc.exe</code> để qua mặt các phần mềm kiểm soát thông thường.</li>
+    <li><strong>Giải pháp băm nhị phân SHA-256:</strong> Động cơ mở tệp trên đĩa cứng và băm toàn bộ dòng byte nhị phân. Mã băm SHA-256 đại diện cho nội dung máy tính toán độc nhất của tệp. Dù tên tệp có đổi thành bất kỳ chữ gì, mã băm SHA-256 bên trong vẫn giữ nguyên và trùng khớp với danh mục cấm:
+      <pre class="code-box">file_hash = hashlib.sha256(chunk_bytes).hexdigest()
+if file_hash in self.blocked_hashes:
+    proc.terminate() # Tắt ứng dụng an toàn và hiển thị thông báo giải thích</pre>
+    </li>
+    <li><strong>Bộ đệm In-Memory RAM Caching:</strong> Nhóm lưu cache trong RAM: <code>(path, mtime, size) &rarr; hash</code>. Nếu file trên ổ cứng không bị chỉnh sửa, mã băm được trả về từ RAM trong dưới $1\text{ ms}$, CPU tiêu thụ dưới $1\%$, hoàn toàn không gây chậm máy.</li>
+  </ul>
+</div>
+
+<!-- TRANG 7: SƠ ĐỒ 3 — VÒNG ĐỜI PHÂN GIẢI DNS & CHẶN DOH -->
+<h1 class="page-title">Sơ Đồ 3: Vòng Đời Phân Giải DNS, Bẻ Hướng CNAME &amp; Khắc Chế DoH</h1>
+
+<div class="diagram-frame">
+  <svg width="100%" height="auto" viewBox="0 0 740 370" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="mDns" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#0284c7"/></marker>
+      <marker id="mDnsRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#dc2626"/></marker>
+      <marker id="mDnsGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a"/></marker>
+    </defs>
+
+    <!-- TRÌNH DUYỆT -->
+    <rect x="20" y="80" width="130" height="90" rx="8" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+    <text x="85" y="112" font-family="DejaVu Sans" font-size="10" font-weight="bold" text-anchor="middle" fill="#0f172a">TRÌNH DUYỆT</text>
+    <text x="85" y="130" font-family="DejaVu Sans" font-size="8" text-anchor="middle" fill="#475569">Chrome / Edge / Firefox</text>
+    <text x="85" y="145" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#0284c7">Gửi truy vấn DNS</text>
+
+    <!-- MŨI TÊN TỚI PROXY -->
+    <path d="M 150 125 L 205 125" stroke="#0284c7" stroke-width="2.5" marker-end="url(#mDns)"/>
+    <text x="177" y="116" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#0284c7">UDP 53</text>
+
+    <!-- DNS PROXY CỔNG 53 -->
+    <rect x="210" y="25" width="230" height="320" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="325" y="50" font-family="DejaVu Sans" font-size="10.5" font-weight="bold" text-anchor="middle" fill="#1e3a8a">DNS PROXY (127.0.0.1:53)</text>
+    <text x="325" y="65" font-family="DejaVu Sans" font-size="8" text-anchor="middle" fill="#3b82f6">Thư viện dnslib &bull; 3 lớp phòng thủ</text>
+
+    <!-- BƯỚC 1: CANARY DOH -->
+    <rect x="225" y="75" width="200" height="50" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1.2"/>
+    <text x="325" y="93" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">1. Kiểm Tra Canary DoH</text>
+    <text x="325" y="106" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Tên miền: use-application-dns.net</text>
+    <text x="325" y="118" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#b91c1c">&rarr; Trả về NXDOMAIN</text>
+
+    <!-- BƯỚC 2: WHITELIST VĨNH VIỄN -->
+    <rect x="225" y="135" width="200" height="50" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1.2"/>
+    <text x="325" y="153" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">2. Danh Sách Trắng Vĩnh Viễn</text>
+    <text x="325" y="166" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">treem.gov.vn, tongdai111.vn, edu.vn</text>
+    <text x="325" y="178" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#15803d">&rarr; Luôn cho phép truy cập</text>
+
+    <!-- BƯỚC 3: SAFESEARCH CNAME -->
+    <rect x="225" y="195" width="200" height="55" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1.2"/>
+    <text x="325" y="213" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">3. Cưỡng Chế SafeSearch CNAME</text>
+    <text x="325" y="226" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">google.com &rarr; forcesafesearch</text>
+    <text x="325" y="238" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">bing.com &rarr; strict.bing.com</text>
+
+    <!-- BƯỚC 4: BLOCKLIST VÀ HEURISTIC -->
+    <rect x="225" y="260" width="200" height="65" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1.2"/>
+    <text x="325" y="278" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">4. Lọc Tên Miền Cấm &amp; Wildcard</text>
+    <text x="325" y="292" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Chặn root và subdomains (*.bad.com)</text>
+    <text x="325" y="304" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Regex từ khóa cờ bạc / độc hại</text>
+    <text x="325" y="317" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#d97706">&rarr; Trỏ về Blockpage 127.0.0.1</text>
+
+    <!-- 3 MŨI TÊN KẾT QUẢ SANG PHẢI -->
+    <!-- Nhánh 1: Canary NXDOMAIN -->
+    <path d="M 440 100 L 490 70 L 515 70" stroke="#b91c1c" stroke-width="2" marker-end="url(#mDnsRed)"/>
+    <text x="475" y="62" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" fill="#b91c1c">NXDOMAIN</text>
+    <rect x="515" y="45" width="205" height="50" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="617" y="65" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#991b1b">VÔ HIỆU HÓA DOH TRÌNH DUYỆT</text>
+    <text x="617" y="78" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Trình duyệt tắt DoH, quay về dùng</text>
+    <text x="617" y="89" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">DNS hệ điều hành trên cổng 53</text>
+
+    <!-- Nhánh 2: Chặn trỏ Blockpage -->
+    <path d="M 440 290 L 515 290" stroke="#d97706" stroke-width="2" marker-end="url(#mDnsRed)"/>
+    <text x="475" y="282" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" fill="#d97706">127.0.0.1</text>
+    <rect x="515" y="265" width="205" height="50" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="617" y="285" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#b45309">MÁY CHỦ BLOCKPAGE (CỔNG 8080)</text>
+    <text x="617" y="298" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Hiển thị giao diện giáo dục, Hotline 111</text>
+    <text x="617" y="309" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Form xin mở web để học tập</text>
+
+    <!-- Nhánh 3: Chuyển tiếp hợp lệ -->
+    <path d="M 440 160 L 490 180 L 515 180" stroke="#16a34a" stroke-width="2" marker-end="url(#mDnsGreen)"/>
+    <text x="475" y="172" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" fill="#16a34a">Cho phép</text>
+    <rect x="515" y="155" width="205" height="50" rx="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="617" y="175" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#15803d">CHUYỂN TIẾP RA INTERNET SẠCH</text>
+    <text x="617" y="188" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Chuyển tiếp tới Upstream DNS</text>
+    <text x="617" y="199" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Google 8.8.8.8 hoặc Cloudflare 1.1.1.1</text>
+  </svg>
+  <div class="diagram-title">Sơ đồ 3: Cơ chế phân giải DNS, bẻ hướng CNAME SafeSearch và 3 lớp khắc chế DoH của OpenGuard Kids</div>
+</div>
+
+<!-- TRANG 8: CHUYÊN ĐỀ 5 & 6 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 5 &amp; 6 — DNS Proxy &amp; Polite Blockpage</h1>
+
+<div class="tech-card accent-blue">
+  <div class="card-heading">
+    <span>5. Động Cơ Lọc DNS Proxy Cổng 53 (DNSProxy)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F2.3 – F2.5</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/dns_proxy.py</code>, script cứu hộ <code>restore_dns.bat</code></td></tr>
+    <tr><th>Cổng lắng nghe</th><td>UDP <code>127.0.0.1:53</code> &bull; Upstream: <code>8.8.8.8:53</code></td></tr>
+    <tr><th>Hiệu quả kiểm nghiệm</th><td>Chặn 100% tên miền xấu &bull; <strong>0 dương tính giả</strong> trên 20 tên miền giáo dục</td></tr>
+  </table>
+  <p><strong>Chi tiết kỹ thuật 3 lớp khắc chế DoH và SafeSearch CNAME:</strong></p>
+  <ul>
+    <li><strong>Nghịch lý DoH:</strong> Các trình duyệt hiện đại (Chrome, Firefox) gửi DNS qua HTTPS cổng 443 khiến các phần mềm lọc DNS thông thường bị mù. Nhóm khắc phục bằng <strong>Canary Domain</strong>:
+      <pre class="code-box">if qname == "use-application-dns.net":
+    reply.header.rcode = RCODE.NXDOMAIN
+    return reply.pack() # Trình duyệt nhận NXDOMAIN tự động tắt DoH</pre>
+    </li>
+    <li><strong>Ép buộc CNAME SafeSearch:</strong> Khi trẻ truy vấn <code>google.com</code>, DNS Proxy trả về bản ghi CNAME trỏ sang <code>forcesafesearch.google.com</code>. Trình duyệt bắt buộc phải tìm kiếm ở chế độ an toàn, tự động lọc sạch các hình ảnh, video đồi trụy.</li>
+    <li><strong>Kịch bản cứu hộ mạng khẩn cấp (<code>restore_dns.bat</code>):</strong>
+      <pre class="code-box">netsh interface ip set dns name="Wi-Fi" source=dhcp
+netsh interface ip set dns name="Ethernet" source=dhcp
+ipconfig /flushdns</pre>
+      Chỉ cần một cú nhấp đúp, DNS của mọi card mạng lập tức trở về chế độ tự động của Router, bảo đảm nguyên tắc sống còn: không bao giờ làm mất mạng máy tính người dùng.
+    </li>
+  </ul>
+</div>
+
+<div class="tech-card accent-amber">
+  <div class="card-heading">
+    <span>6. Máy Chủ HTTP Blockpage Giáo Dục Cổng 8080 (BlockpageServer)</span>
+    <span class="meta-tag safe">NGUYÊN TẮC NT3 &bull; NT4</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/blockpage.py</code> (Lớp <code>BlockpageServer</code>)</td></tr>
+    <tr><th>Địa chỉ phục vụ</th><td>HTTP Loopback <code>127.0.0.1:8080</code></td></tr>
+    <tr><th>Yếu tố nhân văn</th><td>Số điện thoại <strong>Tổng đài Quốc gia 111</strong> &bull; Biểu mẫu xin mở trang web</td></tr>
+  </table>
+  <p><strong>Cơ chế hiển thị và tương tác giáo dục:</strong></p>
+  <ul>
+    <li><strong>Không gây lỗi sập mạng giả tạo:</strong> Khi trẻ truy cập trang web cấm, thay vì để trình duyệt hiện lỗi khô khan "Không thể kết nối" khiến trẻ bực bội và nghĩ máy bị hỏng, DNS trỏ trang web về <code>127.0.0.1:8080</code> để hiện một trang giải thích đẹp mắt bằng tiếng Việt.</li>
+    <li><strong>Ngôn từ tôn trọng &amp; Hotline 111:</strong> Trang web ghi rõ: <em>"Trang web này nằm trong danh mục hạn chế theo thỏa thuận gia đình"</em>, kèm biểu tượng và số gọi khẩn cấp của Tổng đài Quốc gia Bảo vệ Trẻ em: **111**.</li>
+    <li><strong>Hộp thư phản hồi (Child Agency):</strong> Cung cấp form nhập liệu: <em>"Lý do em cần mở trang này"</em>. Khi bấm gửi, yêu cầu được đẩy tức thì qua IPC và WebSocket lên Web Dashboard để cha mẹ duyệt mở quyền.</li>
+  </ul>
+</div>
+
+<!-- TRANG 9: SƠ ĐỒ 4 — WEBSOCKET HUB -->
+<h1 class="page-title">Sơ Đồ 4: Kênh Lệnh Khẩn Cấp WebSocket Hub (&lt;5s) &amp; Nhịp Tim 60s</h1>
+
+<div class="diagram-frame">
+  <svg width="100%" height="auto" viewBox="0 0 740 370" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="mWsBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#0284c7"/></marker>
+      <marker id="mWsGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a"/></marker>
+      <marker id="mWsRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#dc2626"/></marker>
+    </defs>
+
+    <!-- CỘT 1: PHỤ HUYNH TRÊN ĐIỆN THOẠI -->
+    <rect x="20" y="25" width="160" height="320" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+    <text x="100" y="50" font-family="DejaVu Sans" font-size="10" font-weight="bold" text-anchor="middle" fill="#1d4ed8">PHỤ HUYNH</text>
+    <text x="100" y="66" font-family="DejaVu Sans" font-size="8" text-anchor="middle" fill="#64748b">(Dashboard Trình Duyệt Mobile)</text>
+
+    <rect x="35" y="85" width="130" height="40" rx="5" fill="#ffffff" stroke="#ef4444" stroke-width="1.2"/>
+    <text x="100" y="103" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#b91c1c">Nút "Khóa Ngay"</text>
+    <text x="100" y="116" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Lệnh khẩn LOCK_URGENT</text>
+
+    <rect x="35" y="140" width="130" height="40" rx="5" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+    <text x="100" y="158" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#15803d">Nút "Mở Khóa"</text>
+    <text x="100" y="171" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Lệnh khẩn UNLOCK</text>
+
+    <rect x="35" y="195" width="130" height="40" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+    <text x="100" y="213" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#0369a1">Nút "+15 Phút"</text>
+    <text x="100" y="226" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Duyệt xin giờ ADD_TIME</text>
+
+    <rect x="35" y="250" width="130" height="40" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+    <text x="100" y="268" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#991b1b">Nút "Xóa Dữ Liệu Kép"</text>
+    <text x="100" y="281" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#7f1d1d">PURGE_LOCAL_CACHE</text>
+
+    <!-- CỘT 2: FASTAPI SERVER WEBSOCKET HUB -->
+    <rect x="270" y="25" width="200" height="320" rx="8" fill="#f8fafc" stroke="#475569" stroke-width="2"/>
+    <text x="370" y="50" font-family="DejaVu Sans" font-size="10" font-weight="bold" text-anchor="middle" fill="#0f172a">WEBSOCKET MANAGER</text>
+    <text x="370" y="66" font-family="DejaVu Sans" font-size="8" text-anchor="middle" fill="#64748b">(FastAPI Server Backend)</text>
+
+    <rect x="285" y="85" width="170" height="85" rx="5" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+    <text x="370" y="105" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1d4ed8">Active Device Sockets</text>
+    <text x="370" y="122" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#334155">ws://server/ws/device/{dev_id}</text>
+    <text x="370" y="138" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#16a34a">Độ trễ đo đạc: 1.37 ms</text>
+    <text x="370" y="152" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Tiêu chuẩn đề bài: &lt; 5,000 ms</text>
+
+    <rect x="285" y="195" width="170" height="95" rx="5" fill="#ffffff" stroke="#ca8a04" stroke-width="1.2"/>
+    <text x="370" y="215" font-family="DejaVu Sans" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#a16207">Hàng Đợi Dự Phòng (Pending)</text>
+    <text x="370" y="232" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#713f12">Kích hoạt khi đứt WebSocket</text>
+    <text x="370" y="248" font-family="DejaVu Sans" font-size="7.5" text-anchor="middle" fill="#475569">Lưu tạm lệnh chờ</text>
+    <text x="370" y="265" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0284c7">Trả về khi nhận nhịp tim 60s</text>
+
+    <!-- CỘT 3: AGENT TRÊN MÁY TÍNH CON -->
+    <rect x="560" y="25" width="160" height="320" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+    <text x="640" y="50" font-family="DejaVu Sans" font-size="10" font-weight="bold" text-anchor="middle" fill="#14532d">AGENT MÁY TRẺ</text>
+    <text x="640" y="66" font-family="DejaVu Sans" font-size="8" text-anchor="middle" fill="#64748b">(Windows Service + Tray UI)</text>
+
+    <rect x="575" y="85" width="130" height="40" rx="5" fill="#ffffff" stroke="#ef4444" stroke-width="1.2"/>
+    <text x="640" y="103" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#b91c1c">Khóa Màn Hình</text>
+    <text x="640" y="116" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Khóa tức thì trong 1.37 ms</text>
+
+    <rect x="575" y="140" width="130" height="40" rx="5" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+    <text x="640" y="158" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#15803d">Mở Khóa Tức Thì</text>
+    <text x="640" y="171" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Giải phóng màn hình khóa</text>
+
+    <rect x="575" y="195" width="130" height="40" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+    <text x="640" y="213" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#0369a1">+15 Phút Hạn Ngạch</text>
+    <text x="640" y="226" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">Đồng hồ tự cộng giờ</text>
+
+    <rect x="575" y="250" width="130" height="40" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+    <text x="640" y="268" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#991b1b">Xóa Sạch SQLite Cục Bộ</text>
+    <text x="640" y="281" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#7f1d1d">offline_events.db bị xóa 100%</text>
+
+    <!-- MŨI TÊN KẾT NỐI -->
+    <path d="M 180 105 L 270 105" stroke="#dc2626" stroke-width="2" marker-end="url(#mWsRed)"/>
+    <path d="M 180 160 L 270 160" stroke="#16a34a" stroke-width="2" marker-end="url(#mWsGreen)"/>
+    <path d="M 180 215 L 270 215" stroke="#0284c7" stroke-width="2" marker-end="url(#mWsBlue)"/>
+    <path d="M 180 270 L 270 270" stroke="#dc2626" stroke-width="2" marker-end="url(#mWsRed)"/>
+
+    <path d="M 470 105 L 560 105" stroke="#dc2626" stroke-width="2" marker-end="url(#mWsRed)"/>
+    <path d="M 470 160 L 560 160" stroke="#16a34a" stroke-width="2" marker-end="url(#mWsGreen)"/>
+    <path d="M 470 215 L 560 215" stroke="#0284c7" stroke-width="2" marker-end="url(#mWsBlue)"/>
+    <path d="M 470 270 L 560 270" stroke="#dc2626" stroke-width="2" marker-end="url(#mWsRed)"/>
+  </svg>
+  <div class="diagram-title">Sơ đồ 4: Kênh truyền WebSocket Hub đẩy lệnh khẩn cấp tức thời (1.37 ms) và Cơ chế hàng đợi nhịp tim 60s dự phòng</div>
+</div>
+
+<!-- TRANG 10: CHUYÊN ĐỀ 7 & 8 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 7 &amp; 8 — Offline Buffer &amp; Tray UI Ân Hạn 60s</h1>
+
+<div class="tech-card accent-rose">
+  <div class="card-heading">
+    <span>7. Bộ Đệm Sự Kiện Ngoại Tuyến (OfflineEventBuffer)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; NT2, F3.1</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/agent/offline_buffer.py</code> (Lớp <code>OfflineEventBuffer</code>)</td></tr>
+    <tr><th>Đường dẫn tệp</th><td><code>%ProgramData%\OpenGuardKids\offline_events.db</code> (SQLite WAL Mode)</td></tr>
+    <tr><th>Chuẩn riêng tư</th><td>Đúng 7 trường siêu dữ liệu &bull; Khóa chống trùng băm <code>idempotency_key</code></td></tr>
+  </table>
+  <p><strong>Cơ chế bảo đảm tính toàn vẹn khi mất mạng:</strong></p>
+  <ul>
+    <li><strong>Khả năng chịu lỗi khi mất điện:</strong> Bật chế độ <code>PRAGMA journal_mode=WAL;</code> và <code>PRAGMA synchronous=NORMAL;</code>. Kể cả khi máy tính bị rút phích cắm đột ngột, cấu trúc dữ liệu không bao giờ bị hỏng (corrupted).</li>
+    <li><strong>Công thức sinh khóa Idempotency Key:</strong>
+      <pre class="code-box">key_seed = f"{device_id}_{child_id}_{ts}_{event_type}_{subject}"
+idempotency_key = hashlib.sha256(key_seed.encode()).hexdigest()</pre>
+      Trường này được đặt chỉ mục <code>UNIQUE</code> trên Server. Khi có mạng trở lại, Agent gửi toàn bộ sự kiện theo lô (batch). Dù mạng chập chờn gửi lại nhiều lần, Server tự động bỏ qua các bản ghi trùng lặp, bảo đảm thời gian sử dụng được thống kê chính xác tuyệt đối.
+    </li>
+  </ul>
+</div>
+
+<div class="tech-card accent-green">
+  <div class="card-heading">
+    <span>8. Giao Diện Khay Hệ Thống Desktop Tray UI (Session 1)</span>
+    <span class="meta-tag safe">BẮT BUỘC &bull; F1.4, NT4, NT5</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/tray/app.py</code>, <code>src/tray/dialogs.py</code>, <code>src/tray/state_listener.py</code></td></tr>
+    <tr><th>Cơ chế cảnh báo</th><td>Chuỗi Toast 10m/5m/1m &bull; Hộp thoại đếm ngược <strong>60 giây ân hạn</strong> &bull; Hotline 111</td></tr>
+    <tr><th>Quyền của trẻ em</th><td>Nút xin thêm 15 phút &bull; Nút báo chặn nhầm &bull; Màn hình minh bạch NT5</td></tr>
+  </table>
+  <p><strong>Cơ chế 60 giây ân hạn lưu bài tập (Save Work Grace Period):</strong></p>
+  <ul>
+    <li><strong>Tránh mất bài học của trẻ (NT4):</strong> Đa số các phần mềm trên thị trường khóa máy đột ngột khi hết giờ khiến bài tập Word, PowerPoint chưa kịp lưu bị mất sạch, gây bức xúc tâm lý tiêu cực. OpenGuard Kids cài đặt hộp thoại đếm lùi 60 giây khi đồng hồ chạm mốc 0: trẻ có đủ thời gian bấm <code>Ctrl + S</code> để lưu giữ bài làm trước khi màn hình khóa.</li>
+    <li><strong>Màn hình minh bạch (NT5):</strong> Trẻ có thể bấm vào khay hệ thống chọn <em>"Hôm nay em đã dùng gì"</em> để kiểm tra thời gian học tập, thời gian giải trí và 4 cam kết bảo vệ dữ liệu cá nhân của phần mềm.</li>
+  </ul>
+</div>
+
+<!-- TRANG 11: SƠ ĐỒ 5 — ATOMIC DUAL DELETION -->
+<h1 class="page-title">Sơ Đồ 5: Quy Trình Xóa Dữ Liệu Kép (Atomic Dual Deletion) &amp; Quản Trị Vòng Đời</h1>
+
+<div class="diagram-frame">
+  <svg width="100%" height="auto" viewBox="0 0 740 370" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="mSeqBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#0284c7"/></marker>
+      <marker id="mSeqRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#dc2626"/></marker>
+      <marker id="mSeqGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1 L 8 5 L 0 9 z" fill="#16a34a"/></marker>
+    </defs>
+
+    <!-- 3 TIẾN TRÌNH THAM GIA -->
+    <rect x="30" y="20" width="160" height="35" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+    <text x="110" y="42" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#0f172a">PHỤ HUYNH (DASHBOARD)</text>
+
+    <rect x="290" y="20" width="160" height="35" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="370" y="42" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#1d4ed8">FASTAPI SERVER</text>
+
+    <rect x="550" y="20" width="160" height="35" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="630" y="42" font-family="DejaVu Sans" font-size="9" font-weight="bold" text-anchor="middle" fill="#15803d">AGENT (MÁY CỦA TRẺ)</text>
+
+    <!-- ĐƯỜNG LIFELINE -->
+    <line x1="110" y1="55" x2="110" y2="355" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5,5"/>
+    <line x1="370" y1="55" x2="370" y2="355" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5,5"/>
+    <line x1="630" y1="55" x2="630" y2="355" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5,5"/>
+
+    <!-- BƯỚC 1: BẤM NÚT XÓA -->
+    <path d="M 110 85 L 370 85" stroke="#dc2626" stroke-width="2" marker-end="url(#mSeqRed)"/>
+    <text x="240" y="78" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#dc2626">1. DELETE /api/v1/children/{id}/purge-data</text>
+    <text x="240" y="100" font-family="DejaVu Sans" font-size="7" text-anchor="middle" fill="#64748b">(Phụ huynh yêu cầu xóa toàn bộ lịch sử của con)</text>
+
+    <!-- BƯỚC 2: SERVER XÓA DATABASE -->
+    <rect x="360" y="112" width="180" height="32" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+    <text x="450" y="127" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#991b1b">2. XÓA SẠCH DATABASE SERVER</text>
+    <text x="450" y="138" font-family="DejaVu Sans" font-size="6.5" text-anchor="middle" fill="#7f1d1d">DELETE FROM events WHERE child_id = :id</text>
+
+    <!-- BƯỚC 3: WEBSOCKET LỆNH XÓA CỤC BỘ -->
+    <path d="M 370 165 L 630 165" stroke="#0284c7" stroke-width="2" marker-end="url(#mSeqBlue)"/>
+    <text x="500" y="158" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#0284c7">3. WebSocket: {"command": "PURGE_LOCAL_CACHE"}</text>
+
+    <!-- BƯỚC 4: AGENT XÓA FILE SQLITE NỘI BỘ -->
+    <rect x="540" y="180" width="180" height="38" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="1"/>
+    <text x="630" y="196" font-family="DejaVu Sans" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#065f46">4. XÓA SẠCH BỘ ĐỆM CỤC BỘ</text>
+    <text x="630" y="208" font-family="DejaVu Sans" font-size="6.5" text-anchor="middle" fill="#047857">purge_child_events(child_id)</text>
+    <text x="630" y="217" font-family="DejaVu Sans" font-size="6.5" text-anchor="middle" fill="#047857">trong offline_events.db</text>
+
+    <!-- BƯỚC 5: SERVER PHẢN HỒI THÀNH CÔNG -->
+    <path d="M 370 240 L 110 240" stroke="#16a34a" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#mSeqGreen)"/>
+    <text x="240" y="233" font-family="DejaVu Sans" font-size="8" font-weight="bold" text-anchor="middle" fill="#16a34a">5. 200 OK: {"status": "SUCCESS", "deleted_events": N}</text>
+
+    <!-- KHUNG ĐÁNH GIÁ CHUẨN GDPR-K / NGHỊ ĐỊNH 13 -->
+    <rect x="50" y="265" width="640" height="75" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="70" y="286" font-family="DejaVu Sans" font-size="9" font-weight="bold" fill="#14532d">&#10003; KẾT QUẢ ĐỒNG BỘ: DỮ LIỆU BIẾN MẤT HOÀN TOÀN Ở CẢ HAI ĐẦU (ZERO DATA RESIDUE):</text>
+    <text x="70" y="303" font-family="DejaVu Sans" font-size="8" fill="#166534">&bull; Khác biệt với nút xóa thông thường (chỉ xóa Server hoặc Client), Xóa Kép của OGK bảo đảm không còn bất kỳ dấu vết nào.</text>
+    <text x="70" y="318" font-family="DejaVu Sans" font-size="8" fill="#166534">&bull; Nếu máy con tắt nguồn: Lệnh được giữ trong pending_commands, gói tin nhịp tim đầu tiên khi bật máy sẽ lập tức xóa sạch file SQLite.</text>
+    <text x="70" y="333" font-family="DejaVu Sans" font-size="8" font-weight="bold" fill="#047857">&bull; Tác vụ quét 90 ngày (/maintenance/purge-expired): Tự động xóa vĩnh viễn mọi sự kiện ts &lt; now - 90 days.</text>
+  </svg>
+  <div class="diagram-title">Sơ đồ 5: Quy trình tuần tự (Sequence Diagram) của tính năng Xóa Dữ Liệu Kép (Atomic Dual Deletion) bảo vệ quyền riêng tư</div>
+</div>
+
+<!-- TRANG 12: CHUYÊN ĐỀ 9 & 10 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 9 &amp; 10 — Backend Security &amp; Ghép Đôi Thiết Bị</h1>
+
+<div class="tech-card accent-blue">
+  <div class="card-heading">
+    <span>9. Máy Chủ Quản Trị Backend &amp; Bảo Mật Dữ Liệu (FastAPI)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F5</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/server/app.py</code>, <code>src/server/security.py</code>, <code>src/server/database.py</code></td></tr>
+    <tr><th>Mật khẩu chuẩn</th><td><strong>Argon2id (RFC 9106)</strong> &bull; <code>time_cost=3, memory=64MB, parallelism=4</code></td></tr>
+    <tr><th>Kiểm soát phiên</th><td>Cookie <code>HttpOnly; Secure; SameSite=Lax</code> (12h) &bull; Khóa 15p sau 5 lần sai</td></tr>
+  </table>
+  <p><strong>Cơ chế bảo mật sâu và phòng chống lỗ hổng IDOR:</strong></p>
+  <ul>
+    <li><strong>Tại sao chọn Argon2id thay vì Bcrypt/MD5:</strong> MD5 và SHA-256 tính toán cực nhanh, dễ bị card đồ họa GPU thử hàng tỷ mật khẩu mỗi giây. Bcrypt tuy an toàn nhưng chỉ ngốn CPU. Argon2id là thuật toán <em>memory-hard</em> đoạt giải quán quân quốc tế: bằng cách ép tốn 64 MB RAM cho mỗi lần tính toán, Argon2id vô hiệu hóa hoàn toàn sức mạnh song song của các dàn máy đào GPU/ASIC của hacker.</li>
+    <li><strong>Chống lỗ hổng IDOR ở tầng truy vấn ORM:</strong>
+      <pre class="code-box">child = db.query(Child).filter(
+    Child.id == child_id,
+    Child.parent_id == current_parent.id # Ràng buộc kiểm tra quyền sở hữu bắt buộc
+).first()
+if not child: raise HTTPException(status_code=404, detail="Child not found")</pre>
+      Dù kẻ tấn công có đoán được ID con của người khác cũng không thể xem hoặc chỉnh sửa.
+    </li>
+  </ul>
+</div>
+
+<div class="tech-card accent-purple">
+  <div class="card-heading">
+    <span>10. Giao Thức Ghép Đôi Thiết Bị (Device Enrollment Protocol)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; MỤC 2.3</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">Ý nghĩa pháp lý</th><td>Ghi nhận sự đồng thuận của cha mẹ theo <strong>Nghị định 13/2023/NĐ-CP</strong></td></tr>
+    <tr><th>Mã PIN ghép đôi</th><td>8 ký tự ngẫu nhiên &bull; Thời gian sống (TTL) đúng 10 phút &bull; Sử dụng 1 lần</td></tr>
+  </table>
+  <p><strong>Quy trình ghép đôi an toàn 4 bước:</strong></p>
+  <ol>
+    <li>Phụ huynh đăng nhập vào Dashboard và bấm <em>"Thêm thiết bị cho con"</em>. Server sinh mã PIN gồm 8 ký tự từ tập ký tự dễ đọc: <code>ABCDEFGHJKLMNPQRSTUVWXYZ23456789</code> (loại bỏ ký tự dễ nhầm <code>O, 0, I, 1</code>).</li>
+    <li>Mã PIN có hạn đúng 10 phút. Kỹ thuật viên cài đặt Agent trên máy con và nhập mã PIN này.</li>
+    <li>Agent gọi <code>POST /api/v1/enroll/device</code> gửi mã PIN kèm dấu vân tay máy tính (hostname, MAC hash).</li>
+    <li>Server kiểm tra mã PIN: nếu hợp lệ, cấp phát định danh thiết bị độc nhất <code>device_id</code> và token phiên, đồng thời vô hiệu hóa mã PIN ngay lập tức.</li>
+  </ol>
+</div>
+
+<!-- TRANG 13: CHUYÊN ĐỀ 11 & 12 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 11 &amp; 12 — Web Dashboard &amp; Dataset 200 Mục</h1>
+
+<div class="tech-card accent-green">
+  <div class="card-heading">
+    <span>11. Bảng Điều Khiển Phụ Huynh Web Dashboard (HTML5 Responsive)</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F3.2</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File mã nguồn</th><td><code>src/server/templates/dashboard.html</code>, endpoint <code>GET /dashboard/{child_id}</code></td></tr>
+    <tr><th>Giao diện</th><td>Responsive Mobile-first (Co giãn mượt mà trên điện thoại di động và máy tính bảng)</td></tr>
+    <tr><th>Tính năng chính</th><td>Biểu đồ giờ hôm nay/tuần này &bull; Top 10 App/Domain &bull; Hòm thư duyệt yêu cầu</td></tr>
+  </table>
+  <p><strong>Cơ chế hiển thị và duyệt yêu cầu từ xa:</strong></p>
+  <ul>
+    <li><strong>Thẻ thời gian trực quan:</strong> Hiển thị số phút đã dùng so với hạn ngạch ngày qua thanh tiến độ đổi màu (Xanh lam &rarr; Vàng &rarr; Đỏ).</li>
+    <li><strong>Xếp hạng Top 10:</strong> Thống kê 10 ứng dụng dùng nhiều nhất và 10 tên miền truy cập nhiều nhất của con.</li>
+    <li><strong>Hòm thư duyệt tức thời:</strong> Khi con bấm xin thêm giờ hoặc báo chặn nhầm trang web, yêu cầu xuất hiện trên Dashboard. Cha mẹ bấm <strong>Duyệt</strong> thì Server tự động gửi lệnh WebSocket <code>ADD_TIME 15m</code> xuống máy con chỉ trong **1.37 ms**.</li>
+  </ul>
+</div>
+
+<div class="tech-card accent-blue">
+  <div class="card-heading">
+    <span>12. Bộ Dữ Liệu 200 Tên Miền &amp; Cam Kết Pháp Lý PRIVACY.md</span>
+    <span class="meta-tag must">BẮT BUỘC &bull; F2.4, F3.5</span>
+  </div>
+  <table class="data-table">
+    <tr><th style="width: 25%;">File dữ liệu</th><td><code>data/classification_dataset.json</code> (Đúng 200 mục chuẩn theo 6 nhóm)</td></tr>
+    <tr><th>Văn bản pháp lý</th><td><code>PRIVACY.md</code> (Bảng ma trận 4 cột ánh xạ trường &harr; mục đích &harr; thời hạn &harr; quyền xem)</td></tr>
+  </table>
+  <p><strong>Cơ cấu bộ dữ liệu và chính sách mặc định lứa tuổi 6–11:</strong></p>
+  <ul>
+    <li><code>educational</code> (45 tên miền): Wikipedia, Khan Academy, Duolingo... &rarr; <em>Luôn mở, không trừ hạn ngạch giải trí</em>.</li>
+    <li><code>entertainment</code> (35 tên miền): YouTube, Spotify, Netflix... &rarr; <em>Giới hạn theo giờ học</em>.</li>
+    <li><code>social_media</code> (30 tên miền): Facebook, TikTok, Instagram... &rarr; <em>Cấm trẻ dưới 13 tuổi</em>.</li>
+    <li><code>gaming</code> (35 tên miền): Roblox, Minecraft, Steam... &rarr; <em>Hạn ngạch tối đa 45 phút/ngày</em>.</li>
+    <li><code>inappropriate</code> (45 tên miền): Web độc hại, cờ bạc mô phỏng an toàn &rarr; <em>Chặn 100%</em>.</li>
+    <li><code>unclassified</code> (10 tên miền): Trang web mới &rarr; <em>Áp dụng chính sách cảnh báo</em>.</li>
+  </ul>
+</div>
+
+<!-- TRANG 14: CHUYÊN ĐỀ 13, 14 & 15 -->
+<h1 class="page-title">Phần II: Đặc Tả Thành Phần 13 &amp; 14 — Biện Luận Fail-Open &amp; Demo D1</h1>
+
+<div class="tech-card accent-amber">
+  <div class="card-heading">
+    <span>13. Biện Luận Quyết Định Kiến Trúc: Tại Sao Chọn Fail-Open Sau 7 Ngày?</span>
+    <span class="meta-tag safe">NGUYÊN TẮC NT6</span>
+  </div>
+  <p><strong>Câu hỏi Hội đồng:</strong> Khi máy tính mất mạng Internet kéo dài sau 7 ngày, hệ thống nên chọn <strong>Fail-Open</strong> (mở quyền) hay <strong>Fail-Closed</strong> (khóa máy)?</p>
+  <ul>
+    <li><strong>Quyết định kiến trúc của nhóm:</strong> Nhóm kiên định chọn <strong>FAIL-OPEN có ghi nhật ký cảnh báo cục bộ</strong>.</li>
+    <li><strong>Luận điểm 1 — Bảo đảm việc học và an toàn tính mạng của trẻ (NT6):</strong> Nếu router gia đình bị hỏng mạng nhiều ngày mà máy tính bị khóa cứng (Fail-Closed), đứa trẻ sẽ không thể tra cứu bài tập offline, không thể mở bài giảng Word/PowerPoint và không thể liên lạc cứu trợ khẩn cấp.</li>
+    <li><strong>Luận điểm 2 — Tinh thần đồng hành:</strong> Trong thời gian Fail-Open, bộ đệm SQLite vẫn ghi lại nhật ký sử dụng. Khi có mạng trở lại, mọi hoạt động đều được đồng bộ lên Dashboard để cha mẹ đối soát, bảo đảm sự tin cậy mà không biến phần mềm thành công cụ gây ức chế tiêu cực.</li>
+  </ul>
+</div>
+
+<div class="tech-card accent-green">
+  <div class="card-heading">
+    <span>14. Kịch Bản Nghiệm Thu Sống Còn DEMO D1 (6 Bước Khép Kín)</span>
+    <span class="meta-tag must">TIÊU CHUẨN ĐỒ ÁN</span>
+  </div>
+  <p>Toàn bộ quy trình nghiệm thu Demo D1 được tự động hóa tại <code>scripts/e2e_acceptance_verification.py</code>:</p>
+  <table class="data-table">
+    <tr><th style="width: 15%;">Bước</th><th style="width: 35%;">Trạng thái hệ thống</th><th style="width: 50%;">Hành vi quan sát được</th></tr>
+    <tr><td><strong>Bước 1</strong></td><td>Đang dùng máy bình thường</td><td>Icon Taskbar hiển thị đồng hồ đếm lùi; bộ đếm trừ giờ đều đặn.</td></tr>
+    <tr><td><strong>Bước 2</strong></td><td>Cảnh báo tăng dần</td><td>Toast lịch sự hiện ở mốc còn 10 phút, 5 phút và 1 phút.</td></tr>
+    <tr><td><strong>Bước 3</strong></td><td>Ân hạn 60 giây (Grace Period)</td><td>Đồng hồ về 0 &rarr; Hiện hộp thoại đếm lùi 60 giây để trẻ bấm lưu file Word/PPT.</td></tr>
+    <tr><td><strong>Bước 4</strong></td><td>Khóa máy lịch sự</td><td>Hết 60 giây &rarr; Hiện màn hình khóa kèm số Tổng đài 111 và nút xin thêm giờ.</td></tr>
+    <tr><td><strong>Bước 5</strong></td><td>Trẻ xin thêm giờ</td><td>Trẻ bấm "Xin thêm 15 phút" kèm lý do &rarr; Yêu cầu đẩy lên Dashboard.</td></tr>
+    <tr><td><strong>Bước 6</strong></td><td>Cha mẹ duyệt &rarr; Mở khóa</td><td>Cha mẹ bấm Duyệt &rarr; WebSocket bắn lệnh mở khóa &rarr; Màn hình tự mở lại!</td></tr>
+  </table>
+</div>
+
+<!-- TRANG 15: BẢNG NGHIỆM THU 51 BÀI TEST -->
+<h1 class="page-title">Phần III: Bảng Tổng Hợp Nghiệm Thu 51/51 Bài Kiểm Thử Tự Động</h1>
+
+<div class="tech-card accent-green">
+  <div class="card-heading">
+    <span>Chứng Nhận Kiểm Thử Tự Động Toàn Hệ Thống (Pytest 100% Passed)</span>
+    <span class="meta-tag safe">51/51 TESTS PASSED</span>
+  </div>
+  <p>Toàn bộ 51 bài kiểm thử đơn vị và tích hợp trong thư mục <code>tests/</code> được thực thi hoàn tất trong <strong>11.00 giây</strong>:</p>
+
+  <table class="data-table">
+    <tr>
+      <th style="width: 25%;">Tệp kiểm thử</th>
+      <th style="width: 12%;">Số bài test</th>
+      <th style="width: 48%;">Nội dung nghiệp vụ xác thực</th>
+      <th style="width: 15%;">Kết quả</th>
+    </tr>
+    <tr>
+      <td><code>test_dns_proxy.py</code></td>
+      <td><strong>8</strong> tests</td>
+      <td>Canary DoH trả NXDOMAIN, CNAME SafeSearch Google/Bing, Wildcard chặn tên miền con, Whitelist vĩnh viễn, Cổng UDP 53.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">8/8 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_database_and_security.py</code></td>
+      <td><strong>5</strong> tests</td>
+      <td>SQLite WAL mode pragma, Băm Argon2id (RFC 9106), Kiểm tra độ phức tạp mật khẩu, Khóa 15p sau 5 lần sai, Cascade delete.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">5/5 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_ipc.py</code></td>
+      <td><strong>3</strong> tests</td>
+      <td>Mã xác thực Token 64-hex, Từ chối lỗi 403 Forbidden khi sai token, Gói tin nhịp tim và yêu cầu xin quyền qua loopback.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">3/3 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_screen_time.py</code></td>
+      <td><strong>7</strong> tests</td>
+      <td>FSM 10 bước, Tạm dừng khi nhàn rỗi &gt; 5p (user32), Bẫy chống lùi đồng hồ, Giới nghiêm đêm 7&times;48, Đo sai số 1 giờ &le; &plusmn;30s.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">7/7 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_blockpage.py</code></td>
+      <td><strong>3</strong> tests</td>
+      <td>Máy chủ HTTP 127.0.0.1:8080, Hiển thị Tổng đài 111, Biểu mẫu gửi yêu cầu xin mở trang web, Tích hợp với DNS Proxy.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">3/3 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_server_auth.py</code></td>
+      <td><strong>4</strong> tests</td>
+      <td>Đăng ký, Đăng nhập cấp Cookie HttpOnly SameSite=Lax, Khóa brute-force, Ghép đôi PIN 8 ký tự (TTL 10m), Chống IDOR.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">4/4 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_process_monitor.py</code></td>
+      <td><strong>5</strong> tests</td>
+      <td>Băm nhị phân SHA-256, In-Memory Hash Cache O(1), Bắt bài đổi tên file game.exe &rarr; notepad.exe, Tắt tiến trình vi phạm.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">5/5 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_offline_buffer.py</code></td>
+      <td><strong>3</strong> tests</td>
+      <td>Hàng đợi SQLite cục bộ khi đứt mạng, Khóa chống trùng Idempotency key, Tác vụ dọn dẹp dữ liệu cũ hơn 7 ngày.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">3/3 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_sync_and_events.py</code></td>
+      <td><strong>3</strong> tests</td>
+      <td>Tiếp nhận sự kiện theo lô (/events/batch), Fallback hàng đợi nhịp tim 60s, Chống lỗ hổng IDOR khi gửi lệnh thiết bị.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">3/3 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_tray_app.py</code></td>
+      <td><strong>5</strong> tests</td>
+      <td>StateListener polling 1.0s, Chuỗi Toast 10m/5m/1m, Báo động đỏ mất kết nối &gt; 15s, <strong>Nghiệm thu toàn vẹn DEMO D1</strong>.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">5/5 PASSED</span></td>
+    </tr>
+    <tr>
+      <td><code>test_dashboard_and_privacy.py</code></td>
+      <td><strong>5</strong> tests</td>
+      <td>Thống kê báo cáo Dashboard, Duyệt yêu cầu con, <strong>Xóa Kép Atomic Dual Deletion</strong>, Tự động dọn dẹp sau 90 ngày.</td>
+      <td><span style="color: #16a34a; font-weight: bold;">5/5 PASSED</span></td>
+    </tr>
+    <tr style="background-color: #f0fdf4;">
+      <th>TỔNG CỘNG</th>
+      <th>51 tests</th>
+      <th>Toàn bộ 100% chức năng cốt lõi và tiêu chuẩn an toàn đề tài</th>
+      <th><span style="color: #16a34a; font-weight: bold;">100% PASS</span></th>
+    </tr>
+  </table>
+
+  <p style="margin-top: 15px; text-align: center; font-weight: 700; color: #1e3a8a;">
+    &mdash; HẾT TÀI LIỆU ĐẶC TẢ KỸ THUẬT &bull; OPENGUARD KIDS (HCMUS) &mdash;
+  </p>
+</div>
+
+</body>
+</html>

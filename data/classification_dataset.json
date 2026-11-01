@@ -1,0 +1,1415 @@
+{
+  "version": "1.0",
+  "total_entries": 200,
+  "age_group": "6-11 years old baseline",
+  "taxonomy": [
+    "education",
+    "entertainment",
+    "social_media",
+    "games",
+    "inappropriate",
+    "uncategorized"
+  ],
+  "entries": [
+    {
+      "id": 1,
+      "target": "hcmus.edu.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for hcmus.edu.vn"
+    },
+    {
+      "id": 2,
+      "target": "vnuhcm.edu.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for vnuhcm.edu.vn"
+    },
+    {
+      "id": 3,
+      "target": "edu.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for edu.vn"
+    },
+    {
+      "id": 4,
+      "target": "tongdai111.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for tongdai111.vn"
+    },
+    {
+      "id": 5,
+      "target": "treem.gov.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for treem.gov.vn"
+    },
+    {
+      "id": 6,
+      "target": "khanacademy.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for khanacademy.org"
+    },
+    {
+      "id": 7,
+      "target": "duolingo.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for duolingo.com"
+    },
+    {
+      "id": 8,
+      "target": "scratch.mit.edu",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for scratch.mit.edu"
+    },
+    {
+      "id": 9,
+      "target": "code.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for code.org"
+    },
+    {
+      "id": 10,
+      "target": "wikipedia.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for wikipedia.org"
+    },
+    {
+      "id": 11,
+      "target": "vi.wikipedia.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for vi.wikipedia.org"
+    },
+    {
+      "id": 12,
+      "target": "quizlet.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for quizlet.com"
+    },
+    {
+      "id": 13,
+      "target": "wolframalpha.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for wolframalpha.com"
+    },
+    {
+      "id": 14,
+      "target": "natgeokids.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for natgeokids.com"
+    },
+    {
+      "id": 15,
+      "target": "bbc.co.uk/bitesize",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for bbc.co.uk/bitesize"
+    },
+    {
+      "id": 16,
+      "target": "hocmai.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for hocmai.vn"
+    },
+    {
+      "id": 17,
+      "target": "vietjack.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for vietjack.com"
+    },
+    {
+      "id": 18,
+      "target": "tuyensinh247.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for tuyensinh247.com"
+    },
+    {
+      "id": 19,
+      "target": "vio.edu.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for vio.edu.vn"
+    },
+    {
+      "id": 20,
+      "target": "olm.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for olm.vn"
+    },
+    {
+      "id": 21,
+      "target": "tienganh123.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for tienganh123.com"
+    },
+    {
+      "id": 22,
+      "target": "loigiaihay.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for loigiaihay.com"
+    },
+    {
+      "id": 23,
+      "target": "vndoc.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for vndoc.com"
+    },
+    {
+      "id": 24,
+      "target": "onluyen.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for onluyen.vn"
+    },
+    {
+      "id": 25,
+      "target": "vuihoc.vn",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for vuihoc.vn"
+    },
+    {
+      "id": 26,
+      "target": "coursera.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for coursera.org"
+    },
+    {
+      "id": 27,
+      "target": "edx.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for edx.org"
+    },
+    {
+      "id": 28,
+      "target": "mit.edu",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for mit.edu"
+    },
+    {
+      "id": 29,
+      "target": "harvard.edu",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for harvard.edu"
+    },
+    {
+      "id": 30,
+      "target": "ox.ac.uk",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for ox.ac.uk"
+    },
+    {
+      "id": 31,
+      "target": "cambridge.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for cambridge.org"
+    },
+    {
+      "id": 32,
+      "target": "nasa.gov",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for nasa.gov"
+    },
+    {
+      "id": 33,
+      "target": "ted.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for ted.com"
+    },
+    {
+      "id": 34,
+      "target": "britannica.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for britannica.com"
+    },
+    {
+      "id": 35,
+      "target": "sciencedirect.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for sciencedirect.com"
+    },
+    {
+      "id": 36,
+      "target": "mathsisfun.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for mathsisfun.com"
+    },
+    {
+      "id": 37,
+      "target": "geogebra.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for geogebra.org"
+    },
+    {
+      "id": 38,
+      "target": "kahoot.it",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for kahoot.it"
+    },
+    {
+      "id": 39,
+      "target": "padlet.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for padlet.com"
+    },
+    {
+      "id": 40,
+      "target": "canva.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for canva.com"
+    },
+    {
+      "id": 41,
+      "target": "codecademy.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for codecademy.com"
+    },
+    {
+      "id": 42,
+      "target": "w3schools.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for w3schools.com"
+    },
+    {
+      "id": 43,
+      "target": "freecodecamp.org",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for freecodecamp.org"
+    },
+    {
+      "id": 44,
+      "target": "stackexchange.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for stackexchange.com"
+    },
+    {
+      "id": 45,
+      "target": "stackoverflow.com",
+      "category": "education",
+      "default_action_age_6_11": "ALLOW",
+      "notes": "Standard classification for stackoverflow.com"
+    },
+    {
+      "id": 46,
+      "target": "youtube.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for youtube.com"
+    },
+    {
+      "id": 47,
+      "target": "netflix.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for netflix.com"
+    },
+    {
+      "id": 48,
+      "target": "spotify.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for spotify.com"
+    },
+    {
+      "id": 49,
+      "target": "twitch.tv",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for twitch.tv"
+    },
+    {
+      "id": 50,
+      "target": "disneyplus.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for disneyplus.com"
+    },
+    {
+      "id": 51,
+      "target": "zingmp3.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for zingmp3.vn"
+    },
+    {
+      "id": 52,
+      "target": "nhaccuatui.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for nhaccuatui.com"
+    },
+    {
+      "id": 53,
+      "target": "popsww.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for popsww.com"
+    },
+    {
+      "id": 54,
+      "target": "fptplay.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for fptplay.vn"
+    },
+    {
+      "id": 55,
+      "target": "vieon.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for vieon.vn"
+    },
+    {
+      "id": 56,
+      "target": "tv360.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for tv360.vn"
+    },
+    {
+      "id": 57,
+      "target": "galaxyplay.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for galaxyplay.vn"
+    },
+    {
+      "id": 58,
+      "target": "hulu.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for hulu.com"
+    },
+    {
+      "id": 59,
+      "target": "crunchyroll.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for crunchyroll.com"
+    },
+    {
+      "id": 60,
+      "target": "soundcloud.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for soundcloud.com"
+    },
+    {
+      "id": 61,
+      "target": "apple.music.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for apple.music.com"
+    },
+    {
+      "id": 62,
+      "target": "webtoons.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for webtoons.com"
+    },
+    {
+      "id": 63,
+      "target": "mangadex.org",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for mangadex.org"
+    },
+    {
+      "id": 64,
+      "target": "truyenqqviet.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for truyenqqviet.com"
+    },
+    {
+      "id": 65,
+      "target": "nettruyen.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for nettruyen.com"
+    },
+    {
+      "id": 66,
+      "target": "dan-tri.com.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for dan-tri.com.vn"
+    },
+    {
+      "id": 67,
+      "target": "vnexpress.net",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for vnexpress.net"
+    },
+    {
+      "id": 68,
+      "target": "tuoitre.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for tuoitre.vn"
+    },
+    {
+      "id": 69,
+      "target": "thanhnien.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for thanhnien.vn"
+    },
+    {
+      "id": 70,
+      "target": "kenh14.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for kenh14.vn"
+    },
+    {
+      "id": 71,
+      "target": "zingnews.vn",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for zingnews.vn"
+    },
+    {
+      "id": 72,
+      "target": "gamereactor.eu",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for gamereactor.eu"
+    },
+    {
+      "id": 73,
+      "target": "ign.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for ign.com"
+    },
+    {
+      "id": 74,
+      "target": "gamespot.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for gamespot.com"
+    },
+    {
+      "id": 75,
+      "target": "pcgamer.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for pcgamer.com"
+    },
+    {
+      "id": 76,
+      "target": "imdb.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for imdb.com"
+    },
+    {
+      "id": 77,
+      "target": "rottentomatoes.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for rottentomatoes.com"
+    },
+    {
+      "id": 78,
+      "target": "viki.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for viki.com"
+    },
+    {
+      "id": 79,
+      "target": "iq.com",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for iq.com"
+    },
+    {
+      "id": 80,
+      "target": "wetv.vip",
+      "category": "entertainment",
+      "default_action_age_6_11": "QUOTA_LIMITED",
+      "notes": "Standard classification for wetv.vip"
+    },
+    {
+      "id": 81,
+      "target": "facebook.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for facebook.com"
+    },
+    {
+      "id": 82,
+      "target": "tiktok.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for tiktok.com"
+    },
+    {
+      "id": 83,
+      "target": "instagram.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for instagram.com"
+    },
+    {
+      "id": 84,
+      "target": "discord.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for discord.com"
+    },
+    {
+      "id": 85,
+      "target": "zalo.me",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for zalo.me"
+    },
+    {
+      "id": 86,
+      "target": "twitter.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for twitter.com"
+    },
+    {
+      "id": 87,
+      "target": "x.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for x.com"
+    },
+    {
+      "id": 88,
+      "target": "reddit.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for reddit.com"
+    },
+    {
+      "id": 89,
+      "target": "threads.net",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for threads.net"
+    },
+    {
+      "id": 90,
+      "target": "snapchat.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for snapchat.com"
+    },
+    {
+      "id": 91,
+      "target": "telegram.org",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for telegram.org"
+    },
+    {
+      "id": 92,
+      "target": "whatsapp.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for whatsapp.com"
+    },
+    {
+      "id": 93,
+      "target": "skype.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for skype.com"
+    },
+    {
+      "id": 94,
+      "target": "viber.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for viber.com"
+    },
+    {
+      "id": 95,
+      "target": "wechat.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for wechat.com"
+    },
+    {
+      "id": 96,
+      "target": "pinterest.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for pinterest.com"
+    },
+    {
+      "id": 97,
+      "target": "tumblr.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for tumblr.com"
+    },
+    {
+      "id": 98,
+      "target": "linkedin.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for linkedin.com"
+    },
+    {
+      "id": 99,
+      "target": "quora.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for quora.com"
+    },
+    {
+      "id": 100,
+      "target": "medium.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for medium.com"
+    },
+    {
+      "id": 101,
+      "target": "lotus.vn",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for lotus.vn"
+    },
+    {
+      "id": 102,
+      "target": "gapo.vn",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for gapo.vn"
+    },
+    {
+      "id": 103,
+      "target": "line.me",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for line.me"
+    },
+    {
+      "id": 104,
+      "target": "signal.org",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for signal.org"
+    },
+    {
+      "id": 105,
+      "target": "mastodon.social",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for mastodon.social"
+    },
+    {
+      "id": 106,
+      "target": "vk.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for vk.com"
+    },
+    {
+      "id": 107,
+      "target": "clubhouse.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for clubhouse.com"
+    },
+    {
+      "id": 108,
+      "target": "bereal.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for bereal.com"
+    },
+    {
+      "id": 109,
+      "target": "douyin.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for douyin.com"
+    },
+    {
+      "id": 110,
+      "target": "kuaishou.com",
+      "category": "social_media",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for kuaishou.com"
+    },
+    {
+      "id": 111,
+      "target": "roblox.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for roblox.com"
+    },
+    {
+      "id": 112,
+      "target": "steamcommunity.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for steamcommunity.com"
+    },
+    {
+      "id": 113,
+      "target": "steampowered.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for steampowered.com"
+    },
+    {
+      "id": 114,
+      "target": "minecraft.net",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for minecraft.net"
+    },
+    {
+      "id": 115,
+      "target": "epicgames.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for epicgames.com"
+    },
+    {
+      "id": 116,
+      "target": "riotgames.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for riotgames.com"
+    },
+    {
+      "id": 117,
+      "target": "leagueoflegends.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for leagueoflegends.com"
+    },
+    {
+      "id": 118,
+      "target": "ea.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for ea.com"
+    },
+    {
+      "id": 119,
+      "target": "ubisoft.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for ubisoft.com"
+    },
+    {
+      "id": 120,
+      "target": "blizzard.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for blizzard.com"
+    },
+    {
+      "id": 121,
+      "target": "garena.vn",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for garena.vn"
+    },
+    {
+      "id": 122,
+      "target": "lienquan.garena.vn",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for lienquan.garena.vn"
+    },
+    {
+      "id": 123,
+      "target": "ff.garena.vn",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for ff.garena.vn"
+    },
+    {
+      "id": 124,
+      "target": "zingplay.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for zingplay.com"
+    },
+    {
+      "id": 125,
+      "target": "vnggames.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for vnggames.com"
+    },
+    {
+      "id": 126,
+      "target": "genshin.hoyoverse.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for genshin.hoyoverse.com"
+    },
+    {
+      "id": 127,
+      "target": "honkai.hoyoverse.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for honkai.hoyoverse.com"
+    },
+    {
+      "id": 128,
+      "target": "supercell.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for supercell.com"
+    },
+    {
+      "id": 129,
+      "target": "clashofclans.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for clashofclans.com"
+    },
+    {
+      "id": 130,
+      "target": "brawlstars.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for brawlstars.com"
+    },
+    {
+      "id": 131,
+      "target": "poki.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for poki.com"
+    },
+    {
+      "id": 132,
+      "target": "y8.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for y8.com"
+    },
+    {
+      "id": 133,
+      "target": "kizi.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for kizi.com"
+    },
+    {
+      "id": 134,
+      "target": "friv.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for friv.com"
+    },
+    {
+      "id": 135,
+      "target": "crazygames.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for crazygames.com"
+    },
+    {
+      "id": 136,
+      "target": "chess.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for chess.com"
+    },
+    {
+      "id": 137,
+      "target": "lichess.org",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for lichess.org"
+    },
+    {
+      "id": 138,
+      "target": "battlenet.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for battlenet.com"
+    },
+    {
+      "id": 139,
+      "target": "origin.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for origin.com"
+    },
+    {
+      "id": 140,
+      "target": "playstation.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for playstation.com"
+    },
+    {
+      "id": 141,
+      "target": "xbox.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for xbox.com"
+    },
+    {
+      "id": 142,
+      "target": "nintendo.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for nintendo.com"
+    },
+    {
+      "id": 143,
+      "target": "itch.io",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for itch.io"
+    },
+    {
+      "id": 144,
+      "target": "gamejolt.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for gamejolt.com"
+    },
+    {
+      "id": 145,
+      "target": "speedrun.com",
+      "category": "games",
+      "default_action_age_6_11": "RESTRICTED_SCHEDULE",
+      "notes": "Standard classification for speedrun.com"
+    },
+    {
+      "id": 146,
+      "target": "bet88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for bet88.com"
+    },
+    {
+      "id": 147,
+      "target": "kubet.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for kubet.com"
+    },
+    {
+      "id": 148,
+      "target": "thabet.net",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for thabet.net"
+    },
+    {
+      "id": 149,
+      "target": "nohu99.vip",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for nohu99.vip"
+    },
+    {
+      "id": 150,
+      "target": "tai-xiu-online.biz",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for tai-xiu-online.biz"
+    },
+    {
+      "id": 151,
+      "target": "casino888.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for casino888.com"
+    },
+    {
+      "id": 152,
+      "target": "phimsex-hd.xyz",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for phimsex-hd.xyz"
+    },
+    {
+      "id": 153,
+      "target": "porn-hub-example.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for porn-hub-example.com"
+    },
+    {
+      "id": 154,
+      "target": "xxx-adult-content.net",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for xxx-adult-content.net"
+    },
+    {
+      "id": 155,
+      "target": "xvideos-sample.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for xvideos-sample.com"
+    },
+    {
+      "id": 156,
+      "target": "xnxx-stream.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for xnxx-stream.com"
+    },
+    {
+      "id": 157,
+      "target": "hack-game-free.org",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for hack-game-free.org"
+    },
+    {
+      "id": 158,
+      "target": "free-robux-generator.xyz",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for free-robux-generator.xyz"
+    },
+    {
+      "id": 159,
+      "target": "crack-full-soft.net",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for crack-full-soft.net"
+    },
+    {
+      "id": 160,
+      "target": "fitgirl-repacks.site",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for fitgirl-repacks.site"
+    },
+    {
+      "id": 161,
+      "target": "1337x.to",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for 1337x.to"
+    },
+    {
+      "id": 162,
+      "target": "thepiratebay.org",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for thepiratebay.org"
+    },
+    {
+      "id": 163,
+      "target": "yts.mx",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for yts.mx"
+    },
+    {
+      "id": 164,
+      "target": "rutracker.org",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for rutracker.org"
+    },
+    {
+      "id": 165,
+      "target": "fshare.vn/piracy-mock",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for fshare.vn/piracy-mock"
+    },
+    {
+      "id": 166,
+      "target": "fun88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for fun88.com"
+    },
+    {
+      "id": 167,
+      "target": "w88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for w88.com"
+    },
+    {
+      "id": 168,
+      "target": "m88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for m88.com"
+    },
+    {
+      "id": 169,
+      "target": "188bet.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for 188bet.com"
+    },
+    {
+      "id": 170,
+      "target": "bk8.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for bk8.com"
+    },
+    {
+      "id": 171,
+      "target": "fb88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for fb88.com"
+    },
+    {
+      "id": 172,
+      "target": "dafa88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for dafa88.com"
+    },
+    {
+      "id": 173,
+      "target": "vn88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for vn88.com"
+    },
+    {
+      "id": 174,
+      "target": "sin88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for sin88.com"
+    },
+    {
+      "id": 175,
+      "target": "may88.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for may88.com"
+    },
+    {
+      "id": 176,
+      "target": "redtube-sample.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for redtube-sample.com"
+    },
+    {
+      "id": 177,
+      "target": "youporn-sample.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for youporn-sample.com"
+    },
+    {
+      "id": 178,
+      "target": "tube8-sample.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for tube8-sample.com"
+    },
+    {
+      "id": 179,
+      "target": "spankwire-mock.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for spankwire-mock.com"
+    },
+    {
+      "id": 180,
+      "target": "cam4-mock.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for cam4-mock.com"
+    },
+    {
+      "id": 181,
+      "target": "chaturbate-mock.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for chaturbate-mock.com"
+    },
+    {
+      "id": 182,
+      "target": "onlyfans-mock.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for onlyfans-mock.com"
+    },
+    {
+      "id": 183,
+      "target": "darkweb-portal.mock",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for darkweb-portal.mock"
+    },
+    {
+      "id": 184,
+      "target": "tor-onion-link.mock",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for tor-onion-link.mock"
+    },
+    {
+      "id": 185,
+      "target": "silkroad-mock.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for silkroad-mock.com"
+    },
+    {
+      "id": 186,
+      "target": "cheat-engine-hacks.com",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for cheat-engine-hacks.com"
+    },
+    {
+      "id": 187,
+      "target": "aimbot-download.org",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for aimbot-download.org"
+    },
+    {
+      "id": 188,
+      "target": "wallhack-free.net",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for wallhack-free.net"
+    },
+    {
+      "id": 189,
+      "target": "key-generator-crack.info",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for key-generator-crack.info"
+    },
+    {
+      "id": 190,
+      "target": "serial-keys-free.biz",
+      "category": "inappropriate",
+      "default_action_age_6_11": "BLOCK",
+      "notes": "Standard classification for serial-keys-free.biz"
+    },
+    {
+      "id": 191,
+      "target": "my-personal-blog.dev",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for my-personal-blog.dev"
+    },
+    {
+      "id": 192,
+      "target": "portfolio-designer.io",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for portfolio-designer.io"
+    },
+    {
+      "id": 193,
+      "target": "tech-documentation.site",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for tech-documentation.site"
+    },
+    {
+      "id": 194,
+      "target": "sample-hobby-crafts.info",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for sample-hobby-crafts.info"
+    },
+    {
+      "id": 195,
+      "target": "research-papers-archive.net",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for research-papers-archive.net"
+    },
+    {
+      "id": 196,
+      "target": "local-bakery-shop.vn",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for local-bakery-shop.vn"
+    },
+    {
+      "id": 197,
+      "target": "handmade-pottery.art",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for handmade-pottery.art"
+    },
+    {
+      "id": 198,
+      "target": "family-recipes-daily.org",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for family-recipes-daily.org"
+    },
+    {
+      "id": 199,
+      "target": "gardening-tips-hub.net",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for gardening-tips-hub.net"
+    },
+    {
+      "id": 200,
+      "target": "astronomy-photo-gallery.cc",
+      "category": "uncategorized",
+      "default_action_age_6_11": "CLEAN_FILTER",
+      "notes": "Standard classification for astronomy-photo-gallery.cc"
+    }
+  ]
+}
