@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "cmd.exe",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN_HERE"
+      }
+    },
+    "memory": {
+      "command": "cmd.exe",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "%USERPROFILE%\\.gemini\\memory.jsonl"
+      }
+    },
+    "context7": {
+      "command": "cmd.exe",
+      "args": ["/c", "npx", "-y", "@upstash/context7-mcp"]
+    },
+    "playwright": {
+      "command": "cmd.exe",
+      "args": ["/c", "npx", "-y", "@playwright/mcp"]
+    },
+    "sqlite": {
+      "command": "uvx",
+      "args": [
+        "--with",
+        "mcp<2",
+        "mcp-server-sqlite",
+        "--db-path",
+        "%USERPROFILE%\\database.db"
+      ]
+    },
+    "postgres": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://localhost:5432/postgres"
+      ]
+    }
+  }
+}
