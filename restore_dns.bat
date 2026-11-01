@@ -1,34 +1,50 @@
 @echo off
+setlocal EnableDelayedExpansion
 :: ============================================================================
 :: OpenGuard Kids — Emergency DNS Disaster Recovery Script
-:: Purpose: Restores all network adapters to DHCP DNS if the service crashes.
-:: Location: %ProgramFiles%\OpenGuardKids\restore_dns.bat
+:: Purpose: Restores all network adapters (IPv4 & IPv6) to DHCP DNS.
+:: Executed via:
+::   1. 3rd SCM crash failure action (sc.exe failure)
+::   2. uninstall_all.bat
+::   3. Emergency administrator execution
 :: ============================================================================
+
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [OpenGuard Kids] Script yeu cau dac quyen Administrator de khoi phuc DNS!
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    exit /b
+)
+cd /d "%~dp0"
 
 echo [OpenGuard Kids] Starting emergency DNS restoration...
 
-:: Restore Wi-Fi adapter to DHCP
+:: 1. Dynamic adapter discovery via PowerShell
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-NetAdapter -Physical | Where-Object { $_.Status -eq 'Up' } | Select-Object -ExpandProperty Name | Out-File -Encoding ascii '%TEMP%\ogk_active_adapters.txt'" 2>nul
+if exist "%TEMP%\ogk_active_adapters.txt" (
+    for /f "usebackq tokens=*" %%a in ("%TEMP%\ogk_active_adapters.txt") do (
+        echo   [+] Restoring adapter to DHCP: "%%a"
+        netsh interface ipv4 set dnsservers name="%%a" source=dhcp >nul 2>&1
+        netsh interface ipv6 set dnsservers name="%%a" source=dhcp >nul 2>&1
+    )
+    del /f /q "%TEMP%\ogk_active_adapters.txt" >nul 2>&1
+)
+
+:: 2. Static fallbacks for standard adapter names (IPv4 and IPv6)
+echo   [+] Restoring Wi-Fi adapter to DHCP...
 netsh interface ipv4 set dnsservers name="Wi-Fi" source=dhcp >nul 2>&1
-if %ERRORLEVEL% equ 0 (
-    echo   [OK] Wi-Fi adapter restored to DHCP.
-) else (
-    echo   [INFO] Wi-Fi adapter not found or already on DHCP.
-)
+netsh interface ipv6 set dnsservers name="Wi-Fi" source=dhcp >nul 2>&1
 
-:: Restore Ethernet adapter to DHCP
+echo   [+] Restoring Ethernet adapter to DHCP...
 netsh interface ipv4 set dnsservers name="Ethernet" source=dhcp >nul 2>&1
-if %ERRORLEVEL% equ 0 (
-    echo   [OK] Ethernet adapter restored to DHCP.
-) else (
-    echo   [INFO] Ethernet adapter not found or already on DHCP.
-)
+netsh interface ipv6 set dnsservers name="Ethernet" source=dhcp >nul 2>&1
 
-:: Restore Ethernet 2 adapter (if present)
+echo   [+] Restoring Ethernet 2 adapter to DHCP...
 netsh interface ipv4 set dnsservers name="Ethernet 2" source=dhcp >nul 2>&1
+netsh interface ipv6 set dnsservers name="Ethernet 2" source=dhcp >nul 2>&1
 
-:: Flush DNS resolver cache
+:: 3. Flush DNS resolver cache
 ipconfig /flushdns >nul 2>&1
 echo   [OK] Windows DNS Resolver Cache flushed.
 
-echo [OpenGuard Kids] Emergency recovery complete. Internet connectivity restored.
-
+echo [OpenGuard Kids] Emergency recovery complete. Dual-stack DHCP restored.
