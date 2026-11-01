@@ -42,6 +42,60 @@ def get_db():
         db.close()
 
 
-def init_db():
-    """Initializes tables in the database."""
-    Base.metadata.create_all(bind=engine)
+def migrate_db(bind_engine=None):
+    """
+    Automatically reconciles SQLite schema for pre-existing tables.
+    Adds missing columns to 'policies' and 'audit_logs' with safe defaults.
+    """
+    target = bind_engine or engine
+    if target.dialect.name != "sqlite":
+        return
+
+    with target.connect() as conn:
+        # 1. Reconcile policies table
+        res_policies = conn.exec_driver_sql(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='policies'"
+        ).fetchone()
+        if res_policies:
+            existing_cols = {
+                row[1]
+                for row in conn.exec_driver_sql("PRAGMA table_info(policies)").fetchall()
+            }
+            policy_columns = {
+                "daily_quota_weekend_minutes": "INTEGER DEFAULT 120",
+                "safesearch_enabled": "BOOLEAN DEFAULT 1",
+                "schedule_matrix_json": "TEXT DEFAULT '[]'",
+                "app_blocklist_json": "TEXT DEFAULT '[]'",
+                "hmac_signature": "VARCHAR DEFAULT ''",
+            }
+            for col_name, col_def in policy_columns.items():
+                if col_name not in existing_cols:
+                    conn.exec_driver_sql(f"ALTER TABLE policies ADD COLUMN {col_name} {col_def}")
+
+        # 2. Reconcile audit_logs table
+        res_audit = conn.exec_driver_sql(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='audit_logs'"
+        ).fetchone()
+        if res_audit:
+            existing_audit_cols = {
+                row[1]
+                for row in conn.exec_driver_sql("PRAGMA table_info(audit_logs)").fetchall()
+            }
+            audit_columns = {
+                "child_id": "VARCHAR(36)",
+                "details": "TEXT DEFAULT ''",
+                "old_value": "TEXT DEFAULT ''",
+                "new_value": "TEXT DEFAULT ''",
+            }
+            for col_name, col_def in audit_columns.items():
+                if col_name not in existing_audit_cols:
+                    conn.exec_driver_sql(f"ALTER TABLE audit_logs ADD COLUMN {col_name} {col_def}")
+
+        conn.commit()
+
+
+def init_db(bind_engine=None):
+    """Initializes tables in the database and automatically reconciles schemas."""
+    target = bind_engine or engine
+    Base.metadata.create_all(bind=target)
+    migrate_db(target)

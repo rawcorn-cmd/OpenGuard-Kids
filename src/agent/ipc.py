@@ -150,12 +150,14 @@ class IPCManager:
         logger.info(f"IPC Server running on {self.server.server_address}")
 
     def stop(self):
-        self.server.shutdown()
+        # Only invoke shutdown if serve_forever is actually running in another thread to avoid deadlock
+        if self._thread and self._thread.is_alive():
+            self.server.shutdown()
         self.server.server_close()
         if self._thread and self._thread.is_alive():
             self._thread.join(timeout=2.0)
         # Clean up token file
-        if os.path.exists(self.server.token_file):
+        if hasattr(self.server, "token_file") and os.path.exists(self.server.token_file):
             try:
                 os.remove(self.server.token_file)
             except Exception:
@@ -212,7 +214,7 @@ class IPCClient:
             return resp.status_code == 200
 
     def send_request(self, req_type: str, minutes: int = 15, subject: str = "") -> Dict[str, Any]:
-        return self.send_child_request(req_type, {"minutes": minutes, "subject": subject})
+        return self.send_child_request(req_type, {"minutes": minutes, "subject": subject, "reason": subject})
 
     def send_child_request(self, req_type: str, payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         data = {"type": req_type, "request_type": req_type}

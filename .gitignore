@@ -51,3 +51,4 @@ data/*.sqlite
 .pytest_cache/
 tmp/
 temp/
+.agents/

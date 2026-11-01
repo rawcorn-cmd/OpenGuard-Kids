@@ -62,11 +62,28 @@ def main():
 
     if not secret_token:
         token_path = os.path.join(token_dir, TOKEN_FILE_NAME)
-        if os.path.isfile(token_path):
-            with open(token_path, "r", encoding="utf-8") as f:
-                secret_token = f.read().strip()
-        else:
-            print(f"Error: Token file not found at {token_path}. Is the Agent Service running?")
+        wait_timeout = 10.0
+        poll_interval = 0.2
+        start_time = time.time()
+        logged_waiting = False
+
+        while time.time() - start_time < wait_timeout:
+            if os.path.isfile(token_path):
+                try:
+                    with open(token_path, "r", encoding="utf-8") as f:
+                        candidate = f.read().strip()
+                    if candidate:
+                        secret_token = candidate
+                        break
+                except Exception:
+                    pass
+            if not logged_waiting:
+                logger.info("Waiting for Agent Service to initialize token...")
+                logged_waiting = True
+            time.sleep(poll_interval)
+
+        if not secret_token:
+            print(f"Error: Token file not found at {token_path} after waiting {wait_timeout}s. Is the Agent Service running?")
             sys.exit(1)
 
     print("=" * 70)

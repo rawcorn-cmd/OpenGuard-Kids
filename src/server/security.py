@@ -9,7 +9,11 @@ Architecture Specification: docs/ARCHITECTURE.md Section 7.2
 
 import time
 import re
-from typing import Tuple
+import os
+import json
+import hmac
+import hashlib
+from typing import Tuple, Optional, Dict, Any
 from argon2 import PasswordHasher, Type
 from argon2.exceptions import VerifyMismatchError, InvalidHashError
 
@@ -79,4 +83,38 @@ def record_failed_attempt(current_failed_count: int) -> Tuple[int, float]:
     if new_count >= MAX_FAILED_ATTEMPTS:
         return new_count, time.time() + LOCKOUT_DURATION_SECONDS
     return new_count, 0.0
+
+
+def calculate_policy_hmac(policy_dict: Dict[str, Any], secret_key: Optional[str] = None) -> str:
+    """
+    Calculate HMAC-SHA256 signature for canonical policy JSON.
+    Uses canonical JSON (sorted keys, compact separators ',' and ':')
+    Excludes transient fields: 'hmac_signature', 'signature', 'updated_at', 'id', 'weekend_quota_minutes'.
+    """
+    if secret_key is None:
+        secret_key = os.environ.get("OGK_POLICY_SECRET", "openguardkids_default_policy_hmac_secret_2026")
+
+    canonical_dict = {}
+    for k, v in policy_dict.items():
+        if k in ("hmac_signature", "signature", "updated_at", "id"):
+            continue
+        if k == "weekend_quota_minutes":
+            if "daily_quota_weekend_minutes" not in canonical_dict:
+                canonical_dict["daily_quota_weekend_minutes"] = v
+            continue
+        canonical_dict[k] = v
+
+    canonical_json = json.dumps(canonical_dict, sort_keys=True, separators=(",", ":"))
+    return hmac.new(secret_key.encode("utf-8"), canonical_json.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def verify_policy_hmac(policy_dict: Dict[str, Any], signature: str, secret_key: Optional[str] = None) -> bool:
+    """
+    Verify canonical policy JSON HMAC-SHA256 signature.
+    """
+    if not signature:
+        return False
+    expected = calculate_policy_hmac(policy_dict, secret_key=secret_key)
+    return hmac.compare_digest(expected, signature)
+
 

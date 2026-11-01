@@ -53,6 +53,7 @@ def run_rapid_event_flooding_stress():
     presenter.root = MagicMock()
     presenter.icon = MagicMock()
     presenter.toast_mgr = MagicMock()
+    presenter.notifier = MagicMock()
 
     NUM_THREADS = 10
     EVENTS_PER_THREAD = 100
@@ -119,6 +120,7 @@ def run_malformed_corrupted_payload_stress():
     presenter.root = MagicMock()
     presenter.icon = MagicMock()
     presenter.toast_mgr = MagicMock()
+    presenter.notifier = MagicMock()
 
     malformed_events = [
         ("STATUS_UPDATE", {}),

@@ -64,6 +64,10 @@ class ScreenTimeTracker:
     def __init__(
         self,
         daily_quota_seconds: int = 7200,  # Default: 2 hours
+        daily_quota_weekday_seconds: Optional[int] = None,
+        daily_quota_weekend_seconds: Optional[int] = None,
+        bed_time_start: Optional[str] = None,
+        bed_time_end: Optional[str] = None,
         idle_threshold_seconds: int = 300,  # Default: 5 minutes idle pause
         schedule_matrix: Optional[List[List[bool]]] = None,  # 7 days x 48 slots (30m each)
         idle_provider: Optional[Callable[[], float]] = None,
@@ -71,6 +75,10 @@ class ScreenTimeTracker:
         monotonic_time_provider: Optional[Callable[[], float]] = None,
     ):
         self.daily_quota_seconds = daily_quota_seconds
+        self.daily_quota_weekday_seconds = daily_quota_weekday_seconds if daily_quota_weekday_seconds is not None else daily_quota_seconds
+        self.daily_quota_weekend_seconds = daily_quota_weekend_seconds if daily_quota_weekend_seconds is not None else daily_quota_seconds
+        self.bed_time_start = bed_time_start
+        self.bed_time_end = bed_time_end
         self.idle_threshold_seconds = idle_threshold_seconds
 
         # Default schedule: True (allowed) for all 7 days x 48 half-hour slots
@@ -103,6 +111,68 @@ class ScreenTimeTracker:
         self.alerts: List[Dict[str, Any]] = []
 
         # Run initial state evaluation
+        self.tick()
+
+    def get_quota_today_seconds(self, dt: Optional[datetime] = None) -> float:
+        """
+        Determines active daily quota in seconds based on weekday vs. weekend.
+        """
+        if dt is None:
+            dt = datetime.fromtimestamp(self._get_wall_time())
+        # weekday(): Monday is 0, Sunday is 6
+        if dt.weekday() >= 5:
+            return float(self.daily_quota_weekend_seconds)
+        return float(self.daily_quota_weekday_seconds)
+
+    def is_in_bedtime(self, dt: Optional[datetime] = None) -> bool:
+        """
+        Checks whether the given datetime falls within the bedtime curfew window.
+        Handles curfew windows crossing midnight (e.g., 22:00 -> 06:00).
+        """
+        if not self.bed_time_start or not self.bed_time_end:
+            return False
+        if dt is None:
+            dt = datetime.fromtimestamp(self._get_wall_time())
+        try:
+            sh, sm = map(int, self.bed_time_start.split(":"))
+            eh, em = map(int, self.bed_time_end.split(":"))
+            curr_mins = dt.hour * 60 + dt.minute
+            start_mins = sh * 60 + sm
+            end_mins = eh * 60 + em
+            if start_mins <= end_mins:
+                return start_mins <= curr_mins < end_mins
+            else:
+                return curr_mins >= start_mins or curr_mins < end_mins
+        except Exception:
+            return False
+
+    def update_policy(self, policy_data: Dict[str, Any]) -> None:
+        """
+        Dynamically reloads policies (quotas, bedtime curfew, schedule matrix).
+        """
+        if not policy_data:
+            return
+
+        if "daily_quota_minutes" in policy_data and policy_data["daily_quota_minutes"] is not None:
+            self.daily_quota_weekday_seconds = int(policy_data["daily_quota_minutes"]) * 60
+            self.daily_quota_seconds = self.daily_quota_weekday_seconds
+
+        weekend_mins = policy_data.get("daily_quota_weekend_minutes") or policy_data.get("weekend_quota_minutes")
+        if weekend_mins is not None:
+            self.daily_quota_weekend_seconds = int(weekend_mins) * 60
+
+        if "bed_time_start" in policy_data and policy_data["bed_time_start"]:
+            self.bed_time_start = policy_data["bed_time_start"]
+
+        if "bed_time_end" in policy_data and policy_data["bed_time_end"]:
+            self.bed_time_end = policy_data["bed_time_end"]
+
+        if "schedule_matrix" in policy_data and policy_data["schedule_matrix"]:
+            matrix = policy_data["schedule_matrix"]
+            if isinstance(matrix, list) and len(matrix) == 7:
+                self.schedule_matrix = matrix
+
+        # Re-evaluate state immediately
         self.tick()
 
     def add_bonus_time(self, minutes: int) -> None:
@@ -140,7 +210,8 @@ class ScreenTimeTracker:
         """
         Calculates remaining quota in seconds. Never returns negative.
         """
-        total_allowed = float(self.daily_quota_seconds) + self.bonus_seconds_today
+        dt = datetime.fromtimestamp(self._get_wall_time())
+        total_allowed = self.get_quota_today_seconds(dt) + self.bonus_seconds_today
         return max(0.0, total_allowed - self.consumed_seconds_today)
 
     def is_locked(self) -> bool:
@@ -199,8 +270,8 @@ class ScreenTimeTracker:
             self.state = ScreenTimeState.LOCKED_URGENT
             return self.state
 
-        # 4. Check Schedule Matrix
-        if not self.is_schedule_allowed(dt):
+        # 4. Check Bedtime Curfew & Schedule Matrix
+        if self.is_in_bedtime(dt) or not self.is_schedule_allowed(dt):
             self.state = ScreenTimeState.LOCKED_SCHEDULE
             return self.state
 
@@ -270,7 +341,11 @@ class ScreenTimeTracker:
             "is_locked": self.is_locked(),
             "remaining_seconds": round(self.get_remaining_seconds(), 1),
             "consumed_seconds_today": round(self.consumed_seconds_today, 1),
-            "daily_quota_seconds": self.daily_quota_seconds,
+            "daily_quota_seconds": int(self.get_quota_today_seconds()),
+            "daily_quota_weekday_seconds": self.daily_quota_weekday_seconds,
+            "daily_quota_weekend_seconds": self.daily_quota_weekend_seconds,
+            "bed_time_start": self.bed_time_start,
+            "bed_time_end": self.bed_time_end,
             "bonus_seconds_today": round(self.bonus_seconds_today, 1),
             "tamper_detected": self.tamper_detected,
             "urgent_lock": self.urgent_lock,

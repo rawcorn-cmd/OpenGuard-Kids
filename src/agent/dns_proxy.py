@@ -7,6 +7,7 @@ Implements Requirements:
 Architecture Specification: docs/ARCHITECTURE.md Section 6.1
 """
 
+import errno
 import socket
 import threading
 import time
@@ -45,9 +46,12 @@ class DNSProxy:
         upstream_port: int = DEFAULT_UPSTREAM_PORT,
         blockpage_ip: str = DEFAULT_BLOCKPAGE_HOST,
         on_blocked_callback: Optional[Callable[[str, str], None]] = None,
+        fallback_port: int = 5353,
     ):
         self.listen_host = listen_host
         self.listen_port = listen_port
+        self.fallback_port = fallback_port
+        self.port = listen_port
         self.upstream_host = upstream_host
         self.upstream_port = upstream_port
         self.blockpage_ip = blockpage_ip
@@ -271,7 +275,37 @@ class DNSProxy:
 
         self._server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self._server_socket.bind((self.listen_host, self.listen_port))
+        try:
+            self._server_socket.bind((self.listen_host, self.listen_port))
+            self.port = self.listen_port
+        except (PermissionError, OSError) as e:
+            is_perm = (
+                isinstance(e, PermissionError)
+                or (isinstance(e, OSError) and getattr(e, "errno", None) == errno.EACCES)
+                or getattr(e, "winerror", None) == 10013
+            )
+            if is_perm and self.listen_port != self.fallback_port:
+                logger.warning(
+                    f"[WARN] Permission denied binding UDP port {self.listen_port}; "
+                    f"falling back to unprivileged port {self.fallback_port} for local testing"
+                )
+                try:
+                    self._server_socket.close()
+                except Exception:
+                    pass
+                self._server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                self._server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                self.listen_port = self.fallback_port
+                self.port = self.fallback_port
+                self._server_socket.bind((self.listen_host, self.listen_port))
+            else:
+                try:
+                    self._server_socket.close()
+                except Exception:
+                    pass
+                self._server_socket = None
+                raise
+
         self._server_socket.settimeout(1.0)
         self._is_running = True
 

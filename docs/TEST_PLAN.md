@@ -2,8 +2,7 @@
 
 > **Document Status:** Verified Baseline Test Plan (Mapped directly to `docs/REQUIREMENTS.md` and `docs/ASSIGNMENT.docx`)  
 > **Course:** Computer Networks (*Mạng máy tính*) — Faculty of Information Technology, HCMUS  
-> **Authoritative Source:** `docs/ASSIGNMENT.docx` (Sections 1, 2, 3, and Appendix)  
-> **Execution Status:** **FULLY EXECUTED & VERIFIED (51/51 Tests Passing - 100%)**.  
+> **Execution Status:** **FULLY EXECUTED & VERIFIED — 190/190 Project Regression Tests Passing (32.3s), 22/22 Adversarial UI & Security Tests Passing (6.4s), 6/6 E2E Scenarios Passing (100%), Quality Gate 2 PASSED (CLEAN/APPROVE)**.  
 > **Test Labeling Rule:** Every test case is explicitly tagged with its assignment source section and priority level (`[BẮT BUỘC / Mandatory]`, `[NÊN CÓ / Should-Have]`, `[CÓ THÌ TỐT / Optional Bonus]`, or `[Appendix Test Suite]`).
 
 ---
@@ -111,6 +110,25 @@ Testing is structured strictly around the explicit acceptance criteria specified
 | **TEST-F5.6** | Section 3, Table F5 | **BẮT BUỘC** | Query Child B data using Parent A credentials (IDOR test). | Query-level ownership check returns 403/404 across `parent`, `child-view`, and `admin` roles. | **PASSED** (`test_server_auth.py`, `test_sync_and_events.py`) |
 | **TEST-F5.7** | Section 3, Table F5 | **BẮT BUỘC** | Inspect NTFS ACL on `%ProgramData%\OpenGuardKids`. | Standard child user cannot write; write permissions restricted strictly to `SYSTEM` and `Administrators`. | **PASSED** (Windows Service installer ACL) |
 | **TEST-F5.8** | Section 3, Table F5 | **BẮT BUỘC** | Simulate desktop tray process crash or closed icon. | Agent detects stealth condition and automatically shuts down (*không được có chế độ ẩn*). | **PASSED** (`test_tray_app.py` anti-abuse safeguard) |
+
+---
+
+### 2.7 Defect Resolution & Multi-Process Verification Suite (R1–R4 & Quality Gate 2)
+
+| Test ID | Test Suite / Target | Priority | Test Scenario | Acceptance Criteria | Empirical Execution & Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **TEST-R1.1** | `stress_screentime_ticks.py` | **BẮT BUỘC** | Stop Agent Service after 134s active usage; boot new Agent Service instance. | Daily usage is queried from SQLite (`ts >= today_midnight`) and restored to exactly 134.0s with matching remaining time. | **PASSED** (134.0s restored, 0.4s) |
+| **TEST-R1.2** | `stress_rapid_lock_unlock_ws.py` | **BẮT BUỘC** | Flood 50 consecutive WebSocket lock/unlock commands. | All 50 commands received and applied without message drop; avg latency $< 1.0$s. | **PASSED** (50/50 toggles, Avg 1.70 ms, 1.8s) |
+| **TEST-R1.3** | `test_curfew_and_quota_rollover.py` | **BẮT BUỘC** | Transition device heartbeat and summary generation across local midnight boundary. | Server resets `bonus_minutes_today` to 0 without manual parent intervention. | **PASSED** (0.6s) |
+| **TEST-R2.1** | `tests/test_tray_app.py` | **BẮT BUỘC** | Dispatch 10m, 5m, 1m warning toasts and 60s grace alert via `CrossPlatformNotifier`. | Displays via `/usr/bin/notify-send` and Zenity on Linux Mint; Win32 toast on Windows; fallback log in headless CI. | **PASSED** (16 tests, 2.8s) |
+| **TEST-R2.2** | `tests/test_tray_app.py` | **BẮT BUỘC** | Launch Tray UI 5 seconds before Agent Service IPC server initializes. | Tray UI polls for token file up to 10s (`poll_for_token`); connects cleanly without crashing. | **PASSED** (Included in test suite) |
+| **TEST-R3.1** | `test_adversarial_ui_and_security.py` | **BẮT BUỘC** | Inject `<script>alert('xss')</script>` in child request reason, subject, and audit details. | `escapeHtml()` renders escaped entities; zero raw `innerHTML` execution. | **PASSED** (`test_parent_dashboard_xss...`) |
+| **TEST-R3.2** | `test_adversarial_ui_and_security.py` | **BẮT BUỘC** | Submit negative (-15), zero (0), and overflowing (9999) minute extensions via dashboard command API. | Endpoint rejects invalid inputs with HTTP 400 (`1 <= minutes <= 240`). | **PASSED** (`test_direct_command_negative...`) |
+| **TEST-R3.3** | `test_adversarial_ui_and_security.py` | **BẮT BUỘC** | Submit malformed domain strings and SQL payloads in unblock requests. | `_is_valid_domain` rejects malformed domains with HTTP 400; zero database corruption. | **PASSED** (`test_malformed_unblock...`) |
+| **TEST-R3.4** | `test_adversarial_ui_and_security.py` | **BẮT BUỘC** | Spawn 20 concurrent threads racing to approve the same pending child request. | Exactly 1 thread executes update; 19 threads receive `ALREADY_PROCESSED`; exactly +15m granted. | **PASSED** (`test_concurrent_quick_review...`) |
+| **TEST-R4.1** | `tests/test_live_multiprocess.py` | **BẮT BUỘC** | Concurrently launch Backend Server, Agent Service, and Tray UI processes; verify IPC, WebSocket, and unprivileged port 53 fallback. | End-to-end device enrollment, emergency lock, request approval, and clean shutdown complete with exit code 0. | **PASSED** (2/2 tests, 7.13s) |
+| **TEST-R4.2** | `scripts/verify_live_runtime.py` | **BẮT BUỘC** | Execute complete 11-step turnkey live multi-process verification runner. | All 11 steps pass (DNS fallback, Server spawn, Enrollment, Agent spawn, Tray spawn, IPC check, WS Lock, WS Unlock, Child Request, Approval, SIGINT). | **PASSED** (11/11 checks, 7.5s) |
+| **TEST-R4.3** | `stress_multiprocess_concurrency.py` | **BẮT BUỘC** | Perform 3 rapid consecutive full-stack boot, test, and teardown cycles. | Zero socket descriptor leaks, zero orphaned processes, and zero thread deadlocks. | **PASSED** (3 cycles, 12.2s) |
 
 ---
 

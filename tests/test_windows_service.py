@@ -52,7 +52,9 @@ def test_windows_service_metadata():
 def test_windows_service_initialization_defaults(tmp_path):
     """Verify initialization with default parameters and ProgramData resolution."""
     fake_program_data = str(tmp_path / "ProgramData")
-    with patch.dict(os.environ, {"ProgramData": fake_program_data}):
+    with patch.dict(os.environ, {"ProgramData": fake_program_data}), \
+         patch("src.agent.ipc.IPCServer") as mock_ipc_cls:
+        mock_ipc_cls.return_value.server_address = ("127.0.0.1", DEFAULT_IPC_PORT)
         service = OpenGuardKidsWindowsService()
         expected_dir = os.path.join(fake_program_data, "OpenGuardKids")
         assert service.data_dir == expected_dir

@@ -62,12 +62,76 @@ class DeviceEnrollResponse(BaseModel):
 
 
 class PolicyUpdateRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     daily_quota_minutes: Optional[int] = Field(None, ge=15, le=1440)
+    daily_quota_weekend_minutes: Optional[int] = Field(None, ge=15, le=1440)
+    weekend_quota_minutes: Optional[int] = Field(None, ge=15, le=1440)
     bed_time_start: Optional[str] = Field(None, pattern=r"^\d{2}:\d{2}$")
     bed_time_end: Optional[str] = Field(None, pattern=r"^\d{2}:\d{2}$")
     blocklist: Optional[List[str]] = None
     whitelist: Optional[List[str]] = None
     study_mode: Optional[bool] = None
+    safesearch_enabled: Optional[bool] = None
+    blocked_apps: Optional[List[Dict[str, Any]]] = None
+    schedule_matrix: Optional[List[List[bool]]] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def reconcile_weekend_quota(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "weekend_quota_minutes" in data and "daily_quota_weekend_minutes" not in data:
+                data["daily_quota_weekend_minutes"] = data["weekend_quota_minutes"]
+            elif "daily_quota_weekend_minutes" in data and "weekend_quota_minutes" not in data:
+                data["weekend_quota_minutes"] = data["daily_quota_weekend_minutes"]
+        return data
+
+
+class PolicyResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True, extra="ignore")
+
+    id: Optional[str] = None
+    child_id: str
+    version: int
+    daily_quota_minutes: int
+    daily_quota_weekend_minutes: int = 120
+    weekend_quota_minutes: int = 120
+    bed_time_start: str
+    bed_time_end: str
+    study_mode: bool
+    safesearch_enabled: bool = True
+    blocklist: List[str] = []
+    whitelist: List[str] = []
+    blocked_apps: List[Dict[str, Any]] = []
+    schedule_matrix: List[List[bool]] = []
+    hmac_signature: str = ""
+    signature: str = ""
+    updated_at: float
+
+
+class DomainRuleRequest(BaseModel):
+    domain: str = Field(..., min_length=3, max_length=255)
+    list_type: str = Field("blacklist", description="'whitelist' or 'blacklist'")
+
+
+class AppHashRuleRequest(BaseModel):
+    name: Optional[str] = Field("app.exe", max_length=255)
+    sha256: str = Field(..., pattern=r"^[a-fA-F0-9]{64}$", description="64-char hex SHA-256 hash")
+
+
+class AuditLogItemResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True, extra="ignore")
+
+    id: str
+    parent_id: str
+    child_id: Optional[str] = None
+    action: str
+    details: Optional[str] = ""
+    old_value: Optional[str] = ""
+    new_value: Optional[str] = ""
+    ip_address: Optional[str] = None
+    ts: float
+
 
 
 class EventItemSchema(BaseModel):
@@ -100,6 +164,7 @@ class HeartbeatRequest(BaseModel):
     remaining_seconds: Optional[float] = None
     child_id: Optional[Any] = None
     status: str = "ACTIVE"
+    is_locked: Optional[bool] = None
 
     @model_validator(mode="before")
     @classmethod
@@ -109,8 +174,13 @@ class HeartbeatRequest(BaseModel):
                 data["screen_time_remaining"] = data["remaining_seconds"]
             elif "remaining_seconds" not in data and "screen_time_remaining" in data:
                 data["remaining_seconds"] = data["screen_time_remaining"]
-            if data.get("screen_time_remaining") is None:
+            if data.get("screen_time_remaining") is None and data.get("remaining_seconds") is None:
                 data["screen_time_remaining"] = 0.0
+                data["remaining_seconds"] = 0.0
+            elif data.get("screen_time_remaining") is None:
+                data["screen_time_remaining"] = data.get("remaining_seconds")
+            elif data.get("remaining_seconds") is None:
+                data["remaining_seconds"] = data.get("screen_time_remaining")
         return data
 
 

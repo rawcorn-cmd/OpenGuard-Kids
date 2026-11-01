@@ -11,6 +11,7 @@ import sqlite3
 import time
 import uuid
 from contextlib import contextmanager
+from datetime import datetime
 from typing import Dict, List, Optional, Any
 
 DEFAULT_LOCAL_DATA_DIR = os.path.join(
@@ -160,5 +161,25 @@ class OfflineEventBuffer:
             )
             conn.commit()
             return cursor.rowcount
+
+    def get_today_screen_time_seconds(self) -> float:
+        """
+        Calculates total active screen-time recorded today (from local midnight)
+        in seconds from local_events table.
+        """
+        now = datetime.now()
+        today_midnight = datetime(now.year, now.month, now.day, 0, 0, 0, 0).timestamp()
+        with self._get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT COALESCE(SUM(duration_sec), 0)
+                FROM local_events
+                WHERE type = 'screen_time' AND ts >= ?
+                """,
+                (today_midnight,),
+            )
+            row = cursor.fetchone()
+            return float(row[0]) if row else 0.0
+
 
 
