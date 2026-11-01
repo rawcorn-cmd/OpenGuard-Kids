@@ -10,6 +10,7 @@ import os
 import sqlite3
 import time
 import uuid
+from contextlib import contextmanager
 from typing import Dict, List, Optional, Any
 
 DEFAULT_LOCAL_DATA_DIR = os.path.join(
@@ -34,12 +35,16 @@ class OfflineEventBuffer:
 
         self._init_db()
 
-    def _get_connection(self) -> sqlite3.Connection:
+    @contextmanager
+    def _get_connection(self):
         conn = sqlite3.connect(self.db_path, timeout=5.0)
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA journal_mode=WAL;")
         conn.execute("PRAGMA synchronous=NORMAL;")
-        return conn
+        try:
+            yield conn
+        finally:
+            conn.close()
 
     def _init_db(self) -> None:
         with self._get_connection() as conn:

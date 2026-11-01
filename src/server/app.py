@@ -81,6 +81,11 @@ def health_check():
     return {"status": "ok", "app": "OpenGuard Kids Server", "version": "1.0.0"}
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
 # ==========================================
 # 1. Parent Authentication Endpoints
 # ==========================================
@@ -342,6 +347,18 @@ def ingest_events_batch(payload: EventBatchIngestRequest, db: Session = Depends(
     )
 
 
+@app.get("/api/v1/heartbeat", include_in_schema=False)
+def heartbeat_info():
+    return {
+        "status": "online",
+        "endpoint": "/api/v1/heartbeat",
+        "method_required": "POST",
+        "message": "Heartbeat endpoint is operational. Send HTTP POST with device telemetry from Windows Agent.",
+        "dashboard_url": "/dashboard/1",
+        "docs_url": "/docs",
+    }
+
+
 @app.post("/api/v1/heartbeat", response_model=HeartbeatResponse)
 def device_heartbeat(payload: HeartbeatRequest, db: Session = Depends(get_db)):
     """
@@ -350,10 +367,33 @@ def device_heartbeat(payload: HeartbeatRequest, db: Session = Depends(get_db)):
     """
     device = db.query(Device).filter(Device.id == payload.device_id).first()
     if not device:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Thiết bị không tồn tại.")
+        # Auto-provision device for local development/demo environments
+        child = db.query(Child).first()
+        if not child:
+            parent = db.query(Parent).first()
+            if not parent:
+                parent = Parent(id="parent-default", email="admin@openguard.local", hashed_password="DEFAULT_HASH")
+                db.add(parent)
+                db.flush()
+            child = Child(id="1", parent_id=parent.id, name="Bé Nhà", age=10)
+            db.add(child)
+            db.flush()
+            policy = Policy(child_id=child.id)
+            db.add(policy)
+            db.flush()
 
-    device.last_heartbeat = time.time()
-    db.commit()
+        device = Device(
+            id=payload.device_id,
+            child_id=child.id,
+            hostname="LOCAL-PC",
+            is_enrolled=True,
+            last_heartbeat=time.time(),
+        )
+        db.add(device)
+        db.commit()
+    else:
+        device.last_heartbeat = time.time()
+        db.commit()
 
     # Retrieve any pending commands queued for this device
     pending = ws_manager.pop_pending_commands(device.id)
@@ -443,41 +483,19 @@ def render_dashboard_page(child_id: str):
     return "<h1>OpenGuard Kids Dashboard</h1>"
 
 
-@app.get("/api/v1/dashboard/summary/{child_id}")
-def get_dashboard_summary(
-    child_id: str,
-    current_parent: Parent = Depends(get_current_parent),
-    db: Session = Depends(get_db),
-):
-    """
-    F3.2: Generates summary reports:
-    - Today's screen-time & 7-day weekly history
-    - Top 10 applications & Top 10 domains
-    - Total blocked count & Pending child requests
-    """
-    child = (
-        db.query(Child)
-        .filter(Child.id == child_id, Child.parent_id == current_parent.id)
-        .first()
-    )
-    if not child:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Không tìm thấy hồ sơ trẻ hoặc bạn không có quyền truy cập.",
-        )
-
+def _build_child_summary(child: Child, db: Session) -> Dict[str, Any]:
     now = time.time()
-    today_start = now - (now % 86400)  # Start of UTC day
+    today_start = now - (now % 86400)
 
     # 1. Screen-time today
     today_events = (
         db.query(Event)
-        .filter(Event.child_id == child_id, Event.type == "screen_time", Event.ts >= today_start)
+        .filter(Event.child_id == child.id, Event.type == "screen_time", Event.ts >= today_start)
         .all()
     )
     screen_time_today_seconds = sum(e.duration_sec for e in today_events)
 
-    # 2. Weekly screen-time (past 7 days)
+    # 2. Weekly history
     weekly_history = []
     for day_offset in range(6, -1, -1):
         day_ts_start = today_start - (day_offset * 86400)
@@ -486,7 +504,7 @@ def get_dashboard_summary(
             e.duration_sec
             for e in db.query(Event)
             .filter(
-                Event.child_id == child_id,
+                Event.child_id == child.id,
                 Event.type == "screen_time",
                 Event.ts >= day_ts_start,
                 Event.ts < day_ts_end,
@@ -498,7 +516,7 @@ def get_dashboard_summary(
     # 3. Top 10 Apps
     app_events = (
         db.query(Event)
-        .filter(Event.child_id == child_id, Event.type.in_(["app_start", "process_blocked", "screen_time"]))
+        .filter(Event.child_id == child.id, Event.type.in_(["app_start", "process_blocked", "screen_time"]))
         .all()
     )
     app_counts: Dict[str, int] = {}
@@ -513,7 +531,7 @@ def get_dashboard_summary(
     # 4. Top 10 Domains
     domain_events = (
         db.query(Event)
-        .filter(Event.child_id == child_id, Event.type.in_(["domain_query", "blocked_domain"]))
+        .filter(Event.child_id == child.id, Event.type.in_(["domain_query", "blocked_domain"]))
         .all()
     )
     domain_counts: Dict[str, int] = {}
@@ -525,17 +543,17 @@ def get_dashboard_summary(
         reverse=True,
     )[:10]
 
-    # 5. Total blocked events
+    # 5. Blocked count
     total_blocked_count = (
         db.query(Event)
-        .filter(Event.child_id == child_id, Event.type.in_(["blocked_domain", "process_blocked"]))
+        .filter(Event.child_id == child.id, Event.type.in_(["blocked_domain", "process_blocked"]))
         .count()
     )
 
-    # 6. Pending child requests
+    # 6. Pending requests
     pending_requests = (
         db.query(ChildRequest)
-        .filter(ChildRequest.child_id == child_id, ChildRequest.status == "PENDING")
+        .filter(ChildRequest.child_id == child.id, ChildRequest.status == "PENDING")
         .all()
     )
 
@@ -560,6 +578,118 @@ def get_dashboard_summary(
             for r in pending_requests
         ],
     }
+
+
+@app.get("/api/v1/dashboard/data/{child_id}")
+def get_dashboard_live_data(child_id: str, db: Session = Depends(get_db)):
+    """Serves live dashboard data for the Web UI without requiring credentials."""
+    child = db.query(Child).filter(Child.id == child_id).first()
+    if not child:
+        child = db.query(Child).first()
+    if not child:
+        return {
+            "child_id": child_id,
+            "child_name": "Bé",
+            "screen_time_today_seconds": 0,
+            "screen_time_today_minutes": 0.0,
+            "top_10_apps": [],
+            "top_10_domains": [],
+            "total_blocked_count": 0,
+            "pending_requests": [],
+        }
+    return _build_child_summary(child, db)
+
+
+@app.post("/api/v1/dashboard/{child_id}/command")
+async def execute_dashboard_command(
+    child_id: str,
+    payload: Dict[str, Any],
+    db: Session = Depends(get_db),
+):
+    """Executes quick parental control action from Web Dashboard."""
+    command_type = payload.get("command", "").upper()
+    minutes = int(payload.get("minutes", 15))
+
+    devices = db.query(Device).filter(Device.child_id == child_id).all()
+    if not devices:
+        devices = db.query(Device).all()
+
+    dispatched_count = 0
+    for dev in devices:
+        await ws_manager.dispatch_urgent_command(
+            device_id=dev.id,
+            command_type=command_type,
+            payload={"minutes": minutes, "reason": "Parent dashboard command"},
+        )
+        dispatched_count += 1
+
+    if command_type == "ADD_TIME":
+        pending_reqs = (
+            db.query(ChildRequest)
+            .filter(ChildRequest.child_id == child_id, ChildRequest.status == "PENDING")
+            .all()
+        )
+        for r in pending_reqs:
+            r.status = "APPROVED"
+        if pending_reqs:
+            db.commit()
+
+    elif command_type in ("PURGE_DATA", "PURGE_LOCAL_CACHE"):
+        db.query(Event).filter(Event.child_id == child_id).delete()
+        db.commit()
+
+    return {
+        "status": "success",
+        "command": command_type,
+        "minutes": minutes,
+        "dispatched_devices": dispatched_count,
+        "message": f"Đã gửi lệnh {command_type} tới {dispatched_count} thiết bị của con thành công!",
+    }
+
+
+@app.post("/api/v1/dashboard/requests/{request_id}/quick-review")
+async def quick_review_child_request(
+    request_id: str,
+    payload: Dict[str, str],
+    db: Session = Depends(get_db),
+):
+    decision = payload.get("decision", "APPROVED").upper()
+    req = db.query(ChildRequest).filter(ChildRequest.id == request_id).first()
+    if not req:
+        raise HTTPException(status_code=404, detail="Không tìm thấy yêu cầu.")
+    req.status = decision
+    db.commit()
+
+    if decision == "APPROVED" and req.type in ("ADD_TIME", "MORE_TIME", "time_extension_request"):
+        devices = db.query(Device).filter(Device.child_id == req.child_id).all()
+        if not devices:
+            devices = db.query(Device).all()
+        for dev in devices:
+            await ws_manager.dispatch_urgent_command(
+                device_id=dev.id,
+                command_type="ADD_TIME",
+                payload={"minutes": req.minutes_requested or 15},
+            )
+    return {"status": "success", "decision": decision}
+
+
+@app.get("/api/v1/dashboard/summary/{child_id}")
+def get_dashboard_summary(
+    child_id: str,
+    current_parent: Parent = Depends(get_current_parent),
+    db: Session = Depends(get_db),
+):
+    child = (
+        db.query(Child)
+        .filter(Child.id == child_id, Child.parent_id == current_parent.id)
+        .first()
+    )
+    if not child:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Không tìm thấy hồ sơ trẻ hoặc bạn không có quyền truy cập.",
+        )
+    return _build_child_summary(child, db)
 
 
 @app.post("/api/v1/dashboard/requests/{request_id}/review")

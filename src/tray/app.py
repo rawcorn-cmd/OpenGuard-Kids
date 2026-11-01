@@ -61,7 +61,20 @@ class TrayAppController:
             self.ui_notifier(event_type, data)
 
     def _handle_status_update(self, status: Dict[str, Any]) -> None:
+        old_remaining = self.current_status.get("remaining_seconds")
+        new_remaining = status.get("remaining_seconds", 0.0)
+
+        # Detect bonus time added (> 60s jump upward)
+        if old_remaining is not None and (new_remaining - old_remaining) > 60.0:
+            added_mins = round((new_remaining - old_remaining) / 60.0)
+            self._notify_ui("BONUS_TIME_ADDED", {
+                "title": "Cộng Thêm Giờ Sử Dụng",
+                "message": f"Phụ huynh đã cộng thêm +{added_mins} phút vào tài khoản của bạn!",
+                "remaining_seconds": new_remaining,
+            })
+
         self.current_status = status
+        self._notify_ui("STATUS_UPDATE", status)
 
     def _handle_warning(self, level: str, remaining_seconds: float) -> None:
         msg = NotificationModel.format_warning_message(level, remaining_seconds)

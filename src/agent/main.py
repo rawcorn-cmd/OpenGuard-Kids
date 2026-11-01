@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--blockpage-port", type=int, default=DEFAULT_BLOCKPAGE_PORT, help="Port for blockpage (default: 8080)")
     parser.add_argument("--ipc-port", type=int, default=DEFAULT_IPC_PORT, help="Port for Tray IPC (default: 8765)")
     parser.add_argument("--quota-mins", type=float, default=120.0, help="Daily screen-time quota in minutes")
+    parser.add_argument("--sync-interval", type=float, default=3.0, help="Sync interval with server in seconds")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -51,6 +52,7 @@ def main():
         blockpage_port=args.blockpage_port,
         ipc_port=args.ipc_port,
         daily_limit_minutes=args.quota_mins,
+        sync_interval_seconds=args.sync_interval,
     )
     service.run()
 

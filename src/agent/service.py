@@ -59,7 +59,7 @@ class AgentService:
         blockpage_port: int = DEFAULT_BLOCKPAGE_PORT,
         ipc_port: int = DEFAULT_IPC_PORT,
         daily_limit_minutes: float = 120.0,
-        sync_interval_seconds: float = 10.0,
+        sync_interval_seconds: float = 3.0,
     ):
         self.device_id = device_id
         self.child_id = child_id
@@ -184,6 +184,7 @@ class AgentService:
         """Provides real-time state for Tray UI status polling."""
         return {
             "status": self.tracker.state.value,
+            "state": self.tracker.state.value,
             "remaining_seconds": self.tracker.get_remaining_seconds(),
             "consumed_seconds": self.tracker.consumed_seconds_today,
             "daily_quota_seconds": self.tracker.daily_quota_seconds,
@@ -256,8 +257,9 @@ class AgentService:
             # 1. Send periodic heartbeat
             hb_payload = {
                 "device_id": self.device_id,
-                "child_id": int(self.child_id) if str(self.child_id).isdigit() else 1,
+                "child_id": str(self.child_id),
                 "status": self.tracker.state.value,
+                "screen_time_remaining": self.tracker.get_remaining_seconds(),
                 "remaining_seconds": self.tracker.get_remaining_seconds(),
             }
             try:
@@ -276,15 +278,14 @@ class AgentService:
             if batch:
                 events_payload = [
                     {
-                        "event_id": row["id"],
+                        "id": row["id"],
                         "device_id": row["device_id"],
-                        "child_id": int(row["child_id"]) if str(row["child_id"]).isdigit() else 1,
-                        "timestamp": row["ts"],
-                        "event_type": row["type"],
-                        "category": "AgentEvent",
-                        "target": row["subject"],
-                        "action": "RECORDED",
-                        "reason": f"Duration: {row.get('duration_sec', 0)}s",
+                        "child_id": str(row["child_id"]),
+                        "type": row["type"],
+                        "subject": row["subject"],
+                        "duration_sec": row.get("duration_sec", 0),
+                        "ts": row["ts"],
+                        "idempotency_key": row["idempotency_key"],
                     }
                     for row in batch
                 ]
@@ -308,18 +309,22 @@ class AgentService:
 
         if cmd_type == "LOCK_URGENT":
             self.tracker.set_urgent_lock(True)
+            logger.info("🔒 [LOCK_URGENT] Nhận lệnh KHÓA KHẨN CẤP từ phụ huynh!")
 
         elif cmd_type == "UNLOCK":
             self.tracker.set_urgent_lock(False)
+            logger.info("🔓 [UNLOCK] Nhận lệnh MỞ KHÓA từ phụ huynh!")
 
         elif cmd_type == "ADD_TIME":
             bonus_minutes = int(payload.get("minutes", 15))
             self.tracker.add_bonus_time(bonus_minutes)
+            rem = self.tracker.get_remaining_seconds()
+            logger.info(f"✨ [ADD_TIME] Đã cộng thêm {bonus_minutes} phút! Thời gian còn lại: {rem/60:.1f} phút.")
 
-        elif cmd_type == "PURGE_DATA":
+        elif cmd_type in ("PURGE_DATA", "PURGE_LOCAL_CACHE"):
             child_id_to_purge = str(payload.get("child_id", self.child_id))
             purged = self.buffer.purge_child_events(child_id_to_purge)
-            logger.info(f"Purged {purged} local records following parent data purge request.")
+            logger.info(f"🗑️ [PURGE_DATA] Đã xóa {purged} bản ghi sự kiện theo lệnh phụ huynh.")
 
     # -------------------------------------------------------------------------
     # Lifecycle Controls

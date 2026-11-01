@@ -31,16 +31,18 @@ def default_ui_display(event_type: str, data: dict):
     """Console UI visualizer for cross-platform demonstration."""
     if event_type == "STATUS_UPDATE":
         rem = data.get("remaining_seconds", 0)
-        status = data.get("status", "UNKNOWN")
+        status = data.get("status") or data.get("state", "UNKNOWN")
         sys.stdout.write(f"\r[Tray State] Status: {status:<15} | Còn lại: {rem/60:05.1f} phút  ")
         sys.stdout.flush()
+    elif event_type == "BONUS_TIME_ADDED":
+        print(f"\n✨ [CỘNG THÊM GIỜ] {data.get('title')}: {data.get('message')}")
     elif event_type == "WARNING_TOAST":
         print(f"\n🔔 [CẢNH BÁO THỜI GIAN] {data.get('title')}: {data.get('message')}")
-    elif event_type == "GRACE_PERIOD":
+    elif event_type in ("GRACE_PERIOD", "GRACE_PERIOD_DIALOG"):
         print(f"\n⏳ [60 GIÂY ÂN HẠN] {data.get('title')}: {data.get('message')}")
-    elif event_type == "LOCK_OVERLAY":
+    elif event_type in ("LOCK_OVERLAY", "LOCK_SCREEN"):
         print(f"\n🔒 [MÀN HÌNH KHÓA] {data.get('title')}: {data.get('message')}")
-    elif event_type == "UNLOCK":
+    elif event_type in ("UNLOCK", "UNLOCK_SCREEN"):
         print(f"\n🔓 [MỞ KHÓA] {data.get('message')}")
     elif event_type == "CONNECTION_LOST":
         print(f"\n⚠️ [MẤT KẾT NỐI SERVICE] {data.get('message')}")

@@ -174,10 +174,24 @@ class IPCClient:
         secret_token: Optional[str] = None,
     ):
         self.base_url = f"http://{host}:{port}"
+        self.token_file = token_file or os.path.join(os.getcwd(), TOKEN_FILE_NAME)
         self.token = secret_token or token
-        if not self.token and token_file and os.path.exists(token_file):
-            with open(token_file, "r", encoding="utf-8") as f:
+        if not self.token and os.path.exists(self.token_file):
+            with open(self.token_file, "r", encoding="utf-8") as f:
                 self.token = f.read().strip()
+
+    def _reload_token_from_file(self) -> bool:
+        """Reloads the token from disk if the Agent Service was restarted."""
+        if self.token_file and os.path.exists(self.token_file):
+            try:
+                with open(self.token_file, "r", encoding="utf-8") as f:
+                    disk_token = f.read().strip()
+                if disk_token and disk_token != self.token:
+                    self.token = disk_token
+                    return True
+            except Exception:
+                pass
+        return False
 
     def _headers(self) -> Dict[str, str]:
         return {"X-OGK-Token": self.token or ""}
@@ -185,12 +199,16 @@ class IPCClient:
     def get_status(self) -> Dict[str, Any]:
         with httpx.Client(timeout=3.0) as client:
             resp = client.get(f"{self.base_url}/status", headers=self._headers())
+            if resp.status_code == 403 and self._reload_token_from_file():
+                resp = client.get(f"{self.base_url}/status", headers=self._headers())
             resp.raise_for_status()
             return resp.json()
 
     def send_heartbeat(self, timestamp: float) -> bool:
         with httpx.Client(timeout=3.0) as client:
             resp = client.post(f"{self.base_url}/heartbeat", headers=self._headers(), json={"timestamp": timestamp})
+            if resp.status_code == 403 and self._reload_token_from_file():
+                resp = client.post(f"{self.base_url}/heartbeat", headers=self._headers(), json={"timestamp": timestamp})
             return resp.status_code == 200
 
     def send_request(self, req_type: str, minutes: int = 15, subject: str = "") -> Dict[str, Any]:
@@ -206,5 +224,11 @@ class IPCClient:
                 headers=self._headers(),
                 json=data,
             )
+            if resp.status_code == 403 and self._reload_token_from_file():
+                resp = client.post(
+                    f"{self.base_url}/request",
+                    headers=self._headers(),
+                    json=data,
+                )
             resp.raise_for_status()
             return resp.json()

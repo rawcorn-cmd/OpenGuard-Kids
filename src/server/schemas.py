@@ -5,7 +5,7 @@ OpenGuard Kids — Pydantic Schemas for Server API
 from __future__ import annotations
 
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class ParentRegisterRequest(BaseModel):
@@ -93,9 +93,25 @@ class EventBatchIngestResponse(BaseModel):
 
 
 class HeartbeatRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     device_id: str
-    screen_time_remaining: float
+    screen_time_remaining: Optional[float] = None
+    remaining_seconds: Optional[float] = None
+    child_id: Optional[Any] = None
     status: str = "ACTIVE"
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "screen_time_remaining" not in data and "remaining_seconds" in data:
+                data["screen_time_remaining"] = data["remaining_seconds"]
+            elif "remaining_seconds" not in data and "screen_time_remaining" in data:
+                data["remaining_seconds"] = data["screen_time_remaining"]
+            if data.get("screen_time_remaining") is None:
+                data["screen_time_remaining"] = 0.0
+        return data
 
 
 class HeartbeatResponse(BaseModel):

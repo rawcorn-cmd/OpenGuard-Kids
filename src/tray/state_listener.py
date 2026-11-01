@@ -72,7 +72,7 @@ class StateListener:
                 self.connection_lost = False
                 logger.info("Reconnected to OGK Service.")
 
-            current_state = status.get("state", "UNKNOWN")
+            current_state = status.get("state") or status.get("status", "UNKNOWN")
             is_locked = status.get("is_locked", False)
             remaining = status.get("remaining_seconds", 0.0)
 

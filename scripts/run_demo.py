@@ -137,29 +137,34 @@ def main():
 
             elif choice == "1":
                 print("\n[*] Gửi truy vấn DNS kiểm tra Google SafeSearch:")
-                ans = agent.dns_proxy.resolve_domain("www.google.com")
-                print(f"    -> Query: www.google.com => Action: {ans.get('action')}, Target: {ans.get('target')}")
+                from dnslib import DNSRecord
+                q = DNSRecord.question("www.google.com")
+                ans = DNSRecord.parse(agent.dns_proxy.handle_query(q.pack()))
+                print(f"    -> Query: www.google.com => Rewritten SafeSearch: {ans.rr}")
 
             elif choice == "2":
                 print("\n[*] Gửi truy vấn DNS thử vào trang cấm 'bet88.com':")
-                ans = agent.dns_proxy.resolve_domain("bet88.com")
-                print(f"    -> Query: bet88.com => Action: {ans.get('action')}, Resolved IP: {ans.get('resolved_ip')} (Trỏ về Blockpage 127.0.0.1)")
+                from dnslib import DNSRecord
+                q = DNSRecord.question("bet88.com")
+                ans = DNSRecord.parse(agent.dns_proxy.handle_query(q.pack()))
+                print(f"    -> Query: bet88.com => Blocked Response: {ans.rr} (Trỏ về Blockpage 127.0.0.1)")
                 print(f"    -> Trẻ em mở trình duyệt sẽ thấy trang Blockpage tại http://127.0.0.1:{blockpage_port}")
 
             elif choice == "3":
                 print("\n[*] Quét tiến trình hệ thống bằng SHA-256:")
-                agent.process_monitor.scan_processes()
+                agent.process_monitor.scan_and_enforce_once()
                 print("    -> Đã quét xong. Các phần mềm đổi tên hoặc vi phạm đều được so khớp mã băm SHA-256.")
 
             elif choice == "4":
                 print("\n[*] Mô phỏng trẻ em chỉnh lùi đồng hồ hệ thống 2 tiếng:")
-                agent.tracker.tick(delta_seconds=-7200.0)
-                print(f"    -> Phát hiện gian lận: {agent.tracker.clock_tamper_detected}")
-                print(f"    -> Thời gian đã dùng vẫn được bảo toàn: {agent.tracker.daily_used_seconds/60:.1f} phút")
+                agent.tracker.last_wall_time = time.time() + 7200.0
+                agent.tracker.tick()
+                print(f"    -> Phát hiện gian lận: {agent.tracker.tamper_detected}")
+                print(f"    -> Thời gian đã dùng vẫn được bảo toàn: {agent.tracker.consumed_seconds_today/60:.1f} phút")
 
             elif choice == "5":
                 print("\n[*] Phụ huynh gửi lệnh KHÓA KHẨN CẤP...")
-                agent.tracker.lock_urgently("Phụ huynh yêu cầu dừng máy để đi ăn cơm.")
+                agent.tracker.set_urgent_lock(True)
                 print(f"    -> Trạng thái mới: {agent.tracker.state.value}")
                 print("    -> Màn hình máy tính lập tức khóa lại với thông báo lịch sự và số Hotline 111.")
 
@@ -168,7 +173,7 @@ def main():
                 res = ipc_client.send_child_request("MORE_TIME", {"minutes": 15, "reason": "Con đang làm dở bài tập Toán"})
                 print(f"    -> Phản hồi IPC: {res}")
                 print("[*] Phụ huynh phê duyệt mở khóa và cộng thêm 15 phút...")
-                agent.tracker.add_bonus_minutes(15.0)
+                agent.tracker.add_bonus_time(15.0 * 60)
                 print(f"    -> Trạng thái mới: {agent.tracker.state.value} (Còn lại: {agent.tracker.get_remaining_seconds()/60:.1f}m)")
 
             elif choice == "7":
@@ -179,7 +184,7 @@ def main():
 
             elif choice == "8":
                 print("\n[*] Thực hiện Xóa Dữ Liệu Đồng Thời (Atomic Dual Deletion) cho Child ID=1:")
-                purged_local = agent.buffer.purge_child_records("1")
+                purged_local = agent.buffer.purge_child_events("1")
                 print(f"    -> Đã xóa sạch {purged_local} bản ghi sự kiện trong SQLite cục bộ.")
                 print("    -> Không lưu trữ bất kỳ dữ liệu nhạy cảm nào, tuân thủ tuyệt đối Luật Trẻ em 2016.")
 
