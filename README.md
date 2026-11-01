@@ -150,12 +150,19 @@ python -m src.tray.main
 ## 6. Chạy Kiểm Thử Tự Động (Automated Testing)
 
 ```bash
-# 1. Chạy toàn bộ 53 Unit & Integration Tests:
+# 1. Chạy toàn bộ 60 Unit & Integration Tests (100% Pass):
 pytest tests/ -v
 
 # 2. Chạy kịch bản nghiệm thu đầu-cuối E2E (6 scenarios F1-F4, NT1-NT6):
 python scripts/e2e_acceptance_verification.py
 ```
+
+### Thành phần Native Desktop GUI cho Tray UI (Session 1)
+- **Engine đồ họa:** `pystray` + `Pillow` + `tkinter` (chuẩn Python), hỗ trợ chế độ headless graceful fallback khi thiếu `$DISPLAY`.
+- **Icon Taskbar động:** Vẽ bằng Pillow 64x64 RGBA với số phút còn lại và 4 ngưỡng màu trực quan (>10m xanh `#0284c7`, 5-10m hổ phách `#f59e0b`, <5m & ân hạn cam đậm `#ea580c`, khóa/mất kết nối đỏ `#dc2626`).
+- **Context Menu chuẩn NT1:** Đúng 6 mục chức năng, tuyệt đối KHÔNG có nút Exit/Quit chống tắt lén.
+- **Hộp thoại ân hạn 60s non-focus-stealing:** Áp dụng `WS_EX_NOACTIVATE` trên Windows, bảo toàn tiêu điểm để phím tắt `Ctrl+S` lưu bài Word/PowerPoint an toàn.
+- **Màn hình khóa & Minh bạch NT5:** Toàn màn hình topmost chặn phím đóng, hiển thị Hotline 111 và nút xin thêm 15 phút.
 
 ---
 

@@ -1,7 +1,7 @@
 # OpenGuard Kids — Task Priority List (TODO)
 
-> **Last Updated:** 2026-10-20  
-> **Schedule Baseline:** 6-Week Compressed Plan. Architecture specification signed off.
+> **Last Updated:** 2026-11-01  
+> **Schedule Baseline:** 6-Week Compressed Plan + Milestone M1 Upgrade.
 
 ---
 
@@ -145,3 +145,22 @@
     - [chuyen_de_http_toan_dien.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/network_curriculum/01_theory_notes/chuyen_de_http_toan_dien.md)
     - [chuyen_de_dhcp_toan_dien.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/network_curriculum/01_theory_notes/chuyen_de_dhcp_toan_dien.md)
     - [chuyen_de_dns_toan_dien.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/network_curriculum/01_theory_notes/chuyen_de_dns_toan_dien.md)
+
+---
+
+## Priority 7: Milestone M1 — Native Desktop GUI Implementation for Tray UI (COMPLETED - 100%)
+
+- [x] **TASK-25: Native Desktop GUI Implementation for Tray UI (Session 1)**
+  - Added `pystray>=0.19.5` and `Pillow>=10.2.0` to `requirements.txt` and installed into `.venv`.
+  - Implemented `src/tray/gui.py` Presenter and Views:
+    - Dynamic Pillow 64x64 RGBA badge rendering remaining minutes in white, with 4 background color thresholds (>10m sky blue `#0284c7`, 5-10m amber `#f59e0b`, <5m deep orange `#ea580c`, locked/offline red `#dc2626`).
+    - Pystray System Tray icon with exact 6-item context menu, strictly excluding Exit/Quit (NT1 anti-tamper).
+    - Escalating real-time toasts: 10m (6s auto-dismiss), 5m (8s auto-dismiss), 1m (10s auto-dismiss + optional beep).
+    - 60-second grace dialog with Win32 `WS_EX_NOACTIVATE` & `WS_EX_TOPMOST`, without focus stealing, digital countdown, progress bar, "Khóa ngay" and "Xin thêm 15 phút" buttons.
+    - Fullscreen lock overlay with `overrideredirect`, `topmost`, `grab_set`, `Alt+F4`/`Esc` interception, transparent lock reason, and National Child Protection Hotline 111 banner.
+    - Transparency window ("Hôm nay em đã dùng gì" - NT5) mirroring parental dashboard statistics and child rights charter.
+    - Thread-safe event queue marshaling from background `OGK-Tray-Listener` to Tkinter mainloop.
+  - Implemented `src/tray/main.py` entrypoint with `is_gui_environment_available()` and graceful fallback to `default_ui_display`.
+  - Updated `src/agent/service.py` to canonically support `"ADD_TIME"` for child time extensions.
+  - Added 7 comprehensive unit tests in `tests/test_tray_app.py`, maintaining 100% test pass (60/60 unit tests, 6/6 E2E acceptance scenarios).
+

@@ -203,7 +203,7 @@ class AgentService:
     def handle_ipc_child_request(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """Handles child agency actions submitted from Tray UI."""
         req_type = payload.get("type") or payload.get("request_type")
-        if req_type in ("MORE_TIME", "REQUEST_MORE_TIME"):
+        if req_type in ("ADD_TIME", "MORE_TIME", "REQUEST_MORE_TIME"):
             mins = int(payload.get("minutes", 15))
             self.buffer.enqueue_event(
                 device_id=self.device_id,

@@ -1,9 +1,9 @@
 # OpenGuard Kids — Project Progress Tracking
 
 > **Course:** Computer Networks (*Mạng máy tính*) — Faculty of Information Technology, HCMUS  
-> **Last Updated:** 2026-10-26  
-> **Schedule Baseline:** 6-Week Execution Plan (Real-world constraint compressed from the nominal 7 weeks).  
-> **Current Phase:** Phase 1 (Architecture Design) COMPLETED — Moving to Week 1 Scaffolding & Technical Spikes.
+> **Last Updated:** 2026-11-01  
+> **Schedule Baseline:** 6-Week Execution Plan + Post-Freeze Desktop GUI Upgrade (M1/M2).  
+> **Current Phase:** M1 (Tray UI Native Desktop GUI Realization) COMPLETED.
 
 ---
 
@@ -19,6 +19,7 @@
 | **Week 4** | Desktop Tray UI & Demo D1 Readiness | **COMPLETED** | 100% | 46/46 Tests passed (StateListener, Warnings, 60s Grace, Lock, Demo D1) |
 | **Week 5** | Parent Dashboard, Transparency & Privacy | **COMPLETED** | 100% | 51/51 Tests passed (HTMX Dashboard, 200+ dataset, PRIVACY.md, Dual Delete) |
 | **Week 6** | Strict Code Freeze, Verification & Defense | **COMPLETED** | 100% | Strict Code Freeze, E2E acceptance runner, FINAL_REPORT (Sec 2.3), DEFENSE_GUIDE |
+| **M1 Upgrade** | Native Desktop GUI for Tray UI (Session 1) | **COMPLETED** | 100% | 60/60 Tests passed, 6/6 E2E scenarios passed (Pystray, Pillow, Tkinter, WS_EX_NOACTIVATE) |
 
 ---
 
@@ -69,11 +70,16 @@
   - **Master Architecture & Interconnection Markdown:** Authored [docs/SYSTEM_MECHANISMS_AND_INTEGRATION.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/SYSTEM_MECHANISMS_AND_INTEGRATION.md) and [CO_CHE_VA_LIEN_KET_HE_THONG.md](file:///home/cornar/Projects/OpenGuard-Kids/CO_CHE_VA_LIEN_KET_HE_THONG.md) detailing all 15 core components, 4 communication channels, and 5 Mermaid sequence lifecycle flows.
   - **16 Modular Component Breakdowns:** Created dedicated deep-dive technical documents in [docs/components/](file:///home/cornar/Projects/OpenGuard-Kids/docs/components/README.md) (15 component files explaining underlying frameworks & Win32/Network internals, plus File 16 providing an end-to-end chronological case study of a family's typical day).
 * [x] **Task Tracking Setup:** Synchronized [PROGRESS.md](file:///home/cornar/Projects/OpenGuard-Kids/PROGRESS.md) and [TODO.md](file:///home/cornar/Projects/OpenGuard-Kids/TODO.md).
+* [x] **M1 Milestone — Native Desktop GUI Implementation (Session 1):**
+  - Implemented `src/tray/gui.py` with `pystray` Taskbar icon, Pillow dynamic 64x64 minute badge (4 color tiers), NT1-compliant 6-item menu (strictly no Exit), 10m/5m/1m escalating toasts, 60s non-focus-stealing grace dialog (`WS_EX_NOACTIVATE`), fullscreen lock overlay, NT5 transparency window, and thread marshaling queue.
+  - Implemented graceful headless fallback in `src/tray/main.py` routing to `default_ui_display` when GUI/DISPLAY is absent.
+  - Enhanced `src/agent/service.py` to canonically accept `"ADD_TIME"` for child time extensions.
+  - Added 7 comprehensive unit tests in `tests/test_tray_app.py`, bringing total tests to 60/60 passing (100%), and verified 6/6 E2E acceptance scenarios (100%).
 
 ---
 
 ## 3. Project Status & Defense Readiness
 
-* **Code Status:** Strict Code Freeze enforced. 53/53 tests passing (100%).
+* **Code Status:** Production-ready & hardened. 60/60 tests passing (100%).
 * **Demonstration Readiness:** Turnkey runners (`scripts/run_demo.py`, `scripts/e2e_acceptance_verification.py`, `src.server.main`, `src.agent.main`, `src.tray.main`) verified out-of-the-box.
 * **Documentation Completeness:** 100% complete across assignment requirements, test plan, architectural specs, privacy charters, student defense guides, study notes, and modular component breakdowns.
