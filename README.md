@@ -111,17 +111,37 @@ OpenGuard-Kids/
 * Môi trường phát triển và máy chủ API có thể chạy trên cả Windows, Linux và macOS.
 
 ### Cài Đặt Môi Trường Ảo (Virtual Environment)
+
+#### 👉 Dành cho Windows PowerShell:
+```powershell
+# 1. Tạo môi trường ảo:
+py -m venv .venv
+
+# 2. Kích hoạt môi trường ảo:
+.\.venv\Scripts\Activate.ps1
+
+# 3. Cài đặt các gói phụ thuộc:
+pip install -r requirements.txt
+```
+
+> [!NOTE] **Xử lý các lỗi thường gặp trên Windows PowerShell:**
+> * **Lỗi 1 (Không nhận diện lệnh `source`):** Lệnh `source .venv/bin/activate` chỉ dùng cho Linux/macOS. Trên Windows, bạn bắt buộc phải dùng lệnh: `.\.venv\Scripts\Activate.ps1`.
+> * **Lỗi 2 (PowerShell chặn chạy script - ExecutionPolicy):** Nếu thấy thông báo đỏ `...running scripts is disabled on this system...`, chạy lệnh sau một lần để cấp quyền:
+>   ```powershell
+>   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+>   ```
+>   Sau đó gõ lại: `.\.venv\Scripts\Activate.ps1`
+> * **Lỗi 3 (`python3` không tìm thấy):** Windows không có lệnh `python3`. Hãy dùng lệnh **`py`** hoặc **`python`**.
+
+#### 🐧 Dành cho Linux / macOS:
 ```bash
-# Tạo môi trường ảo
+# 1. Tạo môi trường ảo:
 python3 -m venv .venv
 
-# Kích hoạt môi trường (Linux/macOS)
+# 2. Kích hoạt môi trường ảo:
 source .venv/bin/activate
 
-# Kích hoạt môi trường (Windows PowerShell)
-.venv\Scripts\Activate.ps1
-
-# Cài đặt các gói phụ thuộc
+# 3. Cài đặt các gói phụ thuộc:
 pip install -r requirements.txt
 ```
 
@@ -169,4 +189,3 @@ python scripts/e2e_acceptance_verification.py
 * [docs/DEFENSE_GUIDE.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/DEFENSE_GUIDE.md): Kịch bản Demo D1 và Bộ 10 câu hỏi bảo vệ đồ án kèm mã nguồn.
 * [docs/TEST_PLAN.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/TEST_PLAN.md): Ma trận 51/51 kiểm thử nghiệm thu tự động (100% Passed).
 * [docs/PRIVACY.md](file:///home/cornar/Projects/OpenGuard-Kids/docs/PRIVACY.md): Cam kết pháp lý bảo vệ dữ liệu trẻ em theo Nghị định 13/2023/NĐ-CP.
-

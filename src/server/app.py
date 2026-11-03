@@ -468,10 +468,16 @@ async def websocket_device_endpoint(websocket: WebSocket, device_id: str):
 # 6. Parent Dashboard & Privacy Operations (Week 5 — F3.2, F3.4)
 # ==========================================
 
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 import os
 
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+
+@app.get("/", include_in_schema=False)
+@app.get("/dashboard", include_in_schema=False)
+def redirect_to_default_dashboard():
+    return RedirectResponse(url="/dashboard/1")
+
 
 @app.get("/dashboard/{child_id}", response_class=HTMLResponse)
 def render_dashboard_page(child_id: str):
